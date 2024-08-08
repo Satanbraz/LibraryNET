@@ -1,0 +1,325 @@
+﻿@{
+    var groupedBuys = ((IEnumerable<DTO.Buy>)ViewBag.BuyList);
+    var groupedSells = ((IEnumerable<DTO.Sell>)ViewBag.SellList);
+
+}
+@{
+    ViewBag.Title = "Administrar Compras y Ventas";
+}
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    /* Estilo barra de busqueda */
+    .search-bar {
+        margin-bottom: 20px;
+    }
+
+    /* Estilo Header de las transacciones */
+    .transaction-header {
+        background-color: #162e4d;
+        color: white;
+        padding: 10px;
+        margin-bottom: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    /* Estilo seccion detalles */
+    .transaction-details {
+        display: none;
+        margin-bottom: 20px;
+        transition: max-height 0.3s ease-out;
+    }
+
+    /* Estilos tabla detalles */
+    .details-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .details-table th, .details-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .details-table th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+
+        .details-table td {
+            background-color: #fff;
+        }
+
+    /* Estilo botones de accion */
+    .btn-action {
+        margin: 0 5px;
+    }
+
+    /* Estilo box de Sweet Alert */
+    .swal2-container {
+        z-index: 10000;
+    }
+
+    /* Estilo label de Sweet Alert */
+    .labelReturnDate {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Estilos de las pestañas de navegacion */
+    .nav-tabs .nav-link {
+        margin-right: 0.2rem;
+    }
+
+        .nav-tabs .nav-link.active {
+            background-color: #162e4d;
+            color: white !important;
+        }
+</style>
+
+<h2 id="titlePage">Administrar Compras y Ventas</h2>
+<hr />
+
+<!-- Pestañas -->
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <!-- Pestaña de Compras -->
+    <li class="nav-item">
+        <a class="nav-link active" id="compras-tab" data-toggle="tab" href="#compras" role="tab" aria-controls="compras" aria-selected="true">Compras</a>
+    </li>
+    <!-- Pestaña de Ventas -->
+    <li class="nav-item">
+        <a class="nav-link" id="ventas-tab" data-toggle="tab" href="#ventas" role="tab" aria-controls="ventas" aria-selected="false">Ventas</a>
+    </li>
+</ul>
+
+<!-- Contenido de las pestañas -->
+<div class="tab-content" id="myTabContent">
+    <!-- Contenido de la pestaña Compras -->
+    <div class="tab-pane fade show active" id="compras" role="tabpanel" aria-labelledby="compras-tab">
+        <section>
+            <div class="search-bar">
+                <input type="text" id="searchBuyInput" class="form-control" placeholder="ID de Transacción / Fecha" oninput="searchBuyTransaction()">
+            </div>
+
+            <div id="transactionContainer">
+                @foreach (var buy in groupedBuys.GroupBy(b => b.IdTransaction))
+                {
+                    <!-- Header Transacciones -->
+                    <div class="transaction-header" data-transaction-id="@buy.Key" onclick="toggleDetails('@buy.Key')">
+                        <div class="row">
+                            <div class="col-md-6">
+                                ID de Transacción: @buy.Key
+                            </div>
+                            <div class="col-md-6 text-end">
+                                Fecha de Transacción: @buy.First().BuyDate
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fin Header -->
+                    <!-- Seccion Detalles -->
+                    <div id="details-@buy.Key" class="transaction-details">
+                        <!-- Tabla de detalles de Transaccion -->
+                        <table class="details-table">
+                            <thead>
+                                <tr>
+                                    <th>Título del Libro</th>
+                                    <th>Valor Unidad</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Productos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in buy)
+                                {
+                                    <tr>
+                                        <td>@item.books.Title</td>
+                                        <td>@item.buyDetail.BookPrice.ToString("N0")</td>
+                                        <td>@item.buyDetail.BuyBookQ</td>
+                                        <td>
+                                            @{
+                                                int Uprice = @item.buyDetail.BookPrice;
+                                                int cant = @item.buyDetail.BuyBookQ;
+
+                                                var total = Uprice * cant;
+
+                                                <text>$@total.ToString("N0")</text>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                                @foreach (var item in buy.GroupBy(i => i.TotalBruto))
+                                {
+                                    foreach (var item1 in item.GroupBy(i => i.IVA))
+                                    {
+                                        foreach (var item2 in item1.GroupBy(i => i.TotalAmount))
+                                        {
+                                            <tr>
+                                                <th colspan="3" style="border: none; background:none;"></th>
+                                                <th>Subtotal</th>
+                                                <th>IVA (19%)</th>
+                                                <th>Valor Total</th>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3" style="border: none;"></td>
+                                                <td>$@(item2.First().TotalBruto.ToString("N0"))</td>
+                                                <td>$@item2.First().IVA.ToString("N0")</td>
+                                                <td>$@item2.First().TotalAmount.ToString("N0")</td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <!--- Fin Tabla -->
+                    </div>
+                    <!-- Fin Detalles -->
+                }
+            </div>
+        </section>
+    </div>
+    <!-- Fin pestaña Compras -->
+
+    <!-- Contenido de la pestaña Ventas -->
+    <div class="tab-pane fade" id="ventas" role="tabpanel" aria-labelledby="ventas-tab">
+        <section>
+            <div class="search-bar">
+                <input type="text" id="searchSellInput" class="form-control" placeholder="ID de Transacción / Fecha" oninput="searchSellTransaction()">
+            </div>
+
+            <div id="transactionContainer">
+                @foreach (var sell in groupedSells.GroupBy(b => b.IdTransaction))
+                {
+                    <!-- Header Transacciones -->
+                    <div class="transaction-header" data-transaction-id="@sell.Key" onclick="toggleDetails('@sell.Key')">
+                        <div class="row">
+                            <div class="col-md-6">
+                                ID de Transacción: @sell.Key
+                            </div>
+                            <div class="col-md-6 text-end">
+                                Fecha de Transacción: @sell.First().SellDate
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fin Header -->
+                    <!-- Seccion Detalles -->
+                    <div id="details-@sell.Key" class="transaction-details">
+                        <!-- Tabla de detalles de Transaccion -->
+                        <table class="details-table">
+                            <thead>
+                                <tr>
+                                    <th>Título del Libro</th>
+                                    <th>Valor Unidad</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Productos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in sell)
+                                {
+                                    <tr>
+                                        <td>@item.books.Title</td>
+                                        <td>@item.sellDetail.BookPrice.ToString("N0")</td>
+                                        <td>@item.sellDetail.SellBookQ</td>
+                                        <td>
+                                            @{
+                                                int Uprice = @item.sellDetail.BookPrice;
+                                                int cant = @item.sellDetail.SellBookQ;
+
+                                                var total = Uprice * cant;
+
+                                                <text>$@total.ToString("N0")</text>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                                @foreach (var item in sell.GroupBy(i => i.TotalBruto))
+                                {
+                                    foreach (var item1 in item.GroupBy(i => i.IVA))
+                                    {
+                                        foreach (var item2 in item1.GroupBy(i => i.TotalAmount))
+                                        {
+                                            <tr>
+                                                <th colspan="3" style="border: none; background:none;"></th>
+                                                <th>Subtotal</th>
+                                                <th>IVA (19%)</th>
+                                                <th>Valor Total</th>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3" style="border: none;"></td>
+                                                <td>$@(item2.First().TotalBruto.ToString("N0"))</td>
+                                                <td>$@item2.First().IVA.ToString("N0")</td>
+                                                <td>$@item2.First().TotalAmount.ToString("N0")</td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <!--- Fin Tabla -->
+                    </div>
+                    <!-- Fin Detalles -->
+                }
+            </div>
+        </section>
+    </div>
+    <!-- Fin pestaña Ventas-->
+</div>
+<!-- Fin contenido de pestañas-->
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+
+    // Función para mostrar/ocultar las tablas de registros
+    function toggleDetails(transactionId) {
+        const details = document.getElementById('details-' + transactionId);
+        if (details.style.display === 'none' || details.style.display === '') {
+            details.style.display = 'block';
+            details.style.maxHeight = '500px'; // Asegura una transición fluida
+        } else {
+            details.style.display = 'none';
+            details.style.maxHeight = '0';
+        }
+    }
+
+    // Funcion para filtrar Compras por Id de Transacción 
+    function searchBuyTransaction() {
+        const input = document.getElementById('searchBuyInput').value.toLowerCase();
+        const headers = document.querySelectorAll('.transaction-header');
+
+        headers.forEach(header => {
+            const transactionId = header.textContent.toLowerCase();
+            const details = document.getElementById('details-' + header.dataset.transactionId);
+
+            if (transactionId.includes(input)) {
+                header.style.display = '';
+            } else {
+                header.style.display = 'none';
+                details.style.display = 'none';
+            }
+        });
+    }
+
+    // Funcion para filtrar Ventas por Id de Transacción 
+    function searchSellTransaction() {
+        const input = document.getElementById('searchSellInput').value.toLowerCase();
+        const headers = document.querySelectorAll('.transaction-header');
+
+        headers.forEach(header => {
+            const transactionId = header.textContent.toLowerCase();
+            const details = document.getElementById('details-' + header.dataset.transactionId);
+
+            if (transactionId.includes(input)) {
+                header.style.display = '';
+            } else {
+                header.style.display = 'none';
+                details.style.display = 'none';
+            }
+        });
+    }
+
+</script>

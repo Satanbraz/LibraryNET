@@ -1,0 +1,585 @@
+﻿@model IEnumerable<DTO.Users>
+
+@{
+    ViewBag.title = "Usuarios";
+}
+<style>
+    .modal-vertical-centered .modal-dialog {
+        display: flex;
+        align-items: center;
+        min-height: calc(100% - 1rem); /* Altura mínima del modal */
+    }
+
+    /* Estilos para los mensajes de error */
+    .mensaje-error {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px; /* Espacio entre el campo y el mensaje de error */
+    }
+
+    .panel-body {
+        margin-left: -4%;
+    }
+</style>
+
+<ol class="breadcrumb mb-4 mt-4">
+    <li class="breadcrumb-item"><a href="#">Admin</a></li>
+    <li class="breadcrumb-item active">Usuarios</li>
+</ol>
+
+<!-- Modal Agregar Usuario -->
+<div id="modalAddUser" class="modal fade modal-vertical-centered" tabindex="-1" aria-labelledby="modalAddUserLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAddUserLabel">Agregar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario de agregar usuario -->
+                <form id="formAddUser">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nameUser" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nameUser" name="nameUser" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="lNameUser" class="form-label">Apellido</label>
+                                <input type="text" class="form-control" id="lNameUser" name="lNameUser" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailUser" class="form-label">Correo</label>
+                        <input style="max-width:none" type="email" class="form-control" id="emailUser" name="emailUser" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneUser" class="form-label">Teléfono</label>
+                        <input type="text" class="form-control" id="phoneUser" name="phoneUser" placeholder="+569********" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addressUser" class="form-label">Dirección</label>
+                        <input style="max-width:none" type="text" class="form-control" id="addressUser" name="addressUser" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="control-label" for="rolUser">Tipo Usuario</label>
+                        <select id="rolUser" name="rolUser" class="form-control">
+                        </select>
+                    </div>
+                    <!-- Campos contraseña -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="passUser" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="passUser" name="passUser" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="pass2User" class="form-label">Reingrese contraseña</label>
+                                <input type="password" class="form-control" id="pass2User" name="pass2User" required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Agrega más campos según tus necesidades -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="validarForm()">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin modal agregar -->
+
+<!-- Modal Editar Genero -->
+<div id="modalEditUser" class="modal fade modal-vertical-centered" tabindex="-1" aria-labelledby="modalEditUserLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditUserLabel">Actualizar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario de actualizar usuario -->
+                <form id="formEditUser">
+                    <input type="hidden" id="idUserEdit" />
+                    <input type="hidden" id="passUserEdit" />
+                    <div class="mb-3">
+                        <label for="nameUserEdit" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nameUserEdit" name="nameUserEdit" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lNameUserEdit" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="lNameUserEdit" name="lNameUserEdit" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailUserEdit" class="form-label">Correo</label>
+                        <input type="email" style="max-width:none" class="form-control" id="emailUserEdit" name="emailUserEdit" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneUserEdit" class="form-label">Teléfono</label>
+                        <input type="text" class="form-control" id="phoneUserEdit" name="phoneUserEdit" placeholder="+569********" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addressUserEdit" class="form-label">Dirección</label>
+                        <input type="text" style="max-width:none" class="form-control" id="addressUserEdit" name="addressUserEdit" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="control-label" for="rolUserEdit">Tipo Usuario</label>
+                        <select id="rolUserEdit" name="rolUserEdit" class="form-control">
+                        </select>
+                    </div>
+                    <!-- Agrega más campos según tus necesidades -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="validarFormEdit()">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin modal editar -->
+
+<!-- Contenedor -->
+<div class="card panel">
+    <!-- Header del contenedor -->
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>Listado de Usuarios
+    </div>
+    <!-- Fin header -->
+    <!-- Inicio Data -->
+    <div class="card-body">
+        <!-- Botones de accion -->
+        <div class="row">
+            <div class="text-end">
+                <button onclick="addUser()" class="btn btn-primary">Agregar Usuario</button>
+            </div>
+        </div>
+        <!-- Fin botones -->
+
+        <!-- Tabla Usuarios -->
+        <div class="table-primary">
+            <table border="0" class="table table-responsive">
+                <thead>
+                    <tr role="row">
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Correo</th>
+                        <th>Telefono</th>
+                        <th>Direccion</th>
+                        <th>Fecha Creacion</th>
+                        <th>Tipo Usuario</th>
+                        <th></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var users in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => users.UserName)</td>
+                            <td>@Html.DisplayFor(modelItem => users.UserLastName)</td>
+                            <td>@Html.DisplayFor(modelItem => users.UserEmail)</td>
+                            <td>@Html.DisplayFor(modelItem => users.UserPhone)</td>
+                            <td>@Html.DisplayFor(modelItem => users.UserDir)</td>
+                            <td>@Html.DisplayFor(modelItem => users.UserDate)</td>
+                            <td>@Html.DisplayFor(modelItem => users.UserRolName)</td>
+                            <!--Se insertan botones de accion-->
+                            <td>
+                                <div class="form-actions no-color text-end">
+                                    <button type="button" class="btn btn-warning" onclick="editUser('@users.Id')" title="Editar" data-toggle="modal" data-target="#exampleModal" data-whatever="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                                        </svg>
+                                        Editar
+                                    </button>
+                                    <button type="button" class="btn btn-danger" onclick="delUser('@users.Id')" title="Eliminar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                        </svg>
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </td><!--Fin botones-->
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- Fin tabla-->
+    </div>
+    <!-- Fin Data-->
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#modalAddUser').modal('hide');
+        $('#modalEditUser').modal('hide');
+        $('#modalDelUser').modal('hide');
+
+        // Cargar los géneros al cargar la página para crear registro
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("RolListJson", "Users")',
+            dataType: 'json',
+            success: function (data) {
+                $("#rolUser").empty();
+
+                // Agregar el mensaje de selección por defecto al select Organizaciones
+                $("#rolUser").append('<option value="0">-- Todos --</option>');
+                // Carga de datos a select
+                data.forEach(function (item) {
+                    var option = $("<option>").val(item.Id).text(item.RolName);
+                    $("#rolUser").append(option);
+                });;
+            }
+        });
+    });
+
+    // Mostrar el formulario de Crear
+    function addUser() {
+        // Mostrar la ventana emergente para agregar usuario
+        $('#modalAddUser').modal('show');
+    }
+
+    // Mostrar el formulario de Editar
+    function editUser(id) {
+        // Mostrar la ventana emergente para editar un usuario
+        $('#modalEditUser').modal('show');
+
+        $.ajax({
+            url: '/Users/Details',
+            type: 'GET',
+            data: { Id: id },
+            success: function (data) {
+
+                // console.log(data);
+                // var dT = JSON.parse(data);
+
+                $('#idUser').val(data.Id);
+                $('#nameUserEdit').val(data.UserName);
+                $('#lNameUserEdit').val(data.UserLastName);
+                $('#emailUserEdit').val(data.UserEmail);
+                $('#addressUserEdit').val(data.UserDir);
+                $('#phoneUserEdit').val(data.UserPhone);
+                $('#passUser').val(data.UserPassword);
+                cargarUserRolList(data.UserRolId)
+            },
+            error: function () {
+                alert("Error al cargar registro");
+            }
+        });
+    }
+
+    // Cargar los roles de usuario al cargar la página para editar registro
+    function cargarUserRolList(idUserRol){
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("RolListJson", "Users")',
+            dataType: 'json',
+            success: function (data) {
+                $("#rolUserEdit").empty();
+
+                // Agregar el mensaje de selección por defecto al select Organizaciones
+                $("#rolUserEdit").append('<option value="0">-- Todos --</option>');
+                // Carga de datos a select
+                data.forEach(function (item) {
+                    if (item.Id == idUserRol) {
+                        var option = $("<option selected>").val(item.Id).text(item.RolName);
+                        $("#rolUserEdit").append(option);
+                    } else {
+                        var option = $("<option>").val(item.Id).text(item.RolName);
+                        $("#rolUserEdit").append(option);
+                    }
+                });;
+            }
+        });
+    }
+
+    // Validar formulario
+    function validarForm() {
+
+        var isValid = true;
+
+        //Validacion campo nameUser
+        if (document.getElementById('nameUser').value == "") {
+            mostrarMensajeError(nameUser, 'Ingrese Nombre. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(nameUser);
+        }
+        //Validacion campo lNameUser
+        if (document.getElementById('lNameUser').value == "") {
+            mostrarMensajeError(lNameUser, 'Ingrese Apellido. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(lNameUser);
+        }
+        //Validacion campo emailUser
+        if (document.getElementById('emailUser').value == "") {
+            mostrarMensajeError(emailUser, 'Ingrese Correo. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(emailUser);
+        }
+        //Validacion campo phoneUser
+        if (document.getElementById('phoneUser').value == "") {
+            mostrarMensajeError(phoneUser, 'Ingrese Teléfono. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(phoneUser);
+        }
+        //Validacion campo addressUser
+        if (document.getElementById('addressUser').value == "") {
+            mostrarMensajeError(addressUser, 'Ingrese direccón. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(addressUser);
+        }
+        //Validacion campo rolUser
+
+        if (document.getElementById('rolUser').value <= 0) {
+            mostrarMensajeError(rolUser, 'Seleccione Tipo de Usuario. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(rolUser);
+        }
+
+        //Validacion campo passUser
+        if (document.getElementById('passUser').value == "") {
+            mostrarMensajeError(passUser, 'Ingrese Contraseña. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(passUser);
+        }
+
+        //Validacion campo pass2User
+        if (document.getElementById('pass2User').value == "") {
+            mostrarMensajeError(pass2User, 'Reingrese contraseña. ');
+            isValid = false;
+        } else if (pass2User.value != passUser.value) {
+            mostrarMensajeError(pass2User, 'Contraseñas no coinciden. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(pass2User);
+        }
+
+        if (isValid) {
+            var userModel = {
+                UserName: nameUser.value,
+                UserLastName: lNameUser.value,
+                UserEmail: emailUser.value,
+                UserPassword: passUser.value,
+                UserPhone: phoneUser.value,
+                UserDir: addressUser.value,
+                UserRolId: rolUser.value,
+            }
+
+            saveUser(userModel);
+        }
+
+    }
+
+    // Validar formulario
+    function validarFormEdit() {
+
+        var isValid = true;
+
+        //Validacion campo nameUserEdit
+        document.getElementById('nameUserEdit').addEventListener('blur', function () {
+            if (document.getElementById('nameUserEdit').value == "") {
+                mostrarMensajeError(nameUserEdit, 'Ingrese Nombre. ');
+                isValid = false;
+            } else {
+                ocultarMensajeError(nameUserEdit);
+            }
+        });
+        //Validacion campo authorBook
+        document.getElementById('lNameUserEdit').addEventListener('blur', function () {
+            if (document.getElementById('lNameUserEdit').value == "") {
+                mostrarMensajeError(lNameUserEdit, 'Ingrese Apellido. ');
+                isValid = false;
+            } else {
+                ocultarMensajeError(lNameUserEdit);
+            }
+        });
+        //Validacion campo emailUserEdit
+        document.getElementById('emailUserEdit').addEventListener('blur', function () {
+            if (document.getElementById('emailUserEdit').value <= 0) {
+                mostrarMensajeError(emailUserEdit, 'Ingrese Correo. ');
+                isValid = false;
+            } else {
+                ocultarMensajeError(emailUserEdit);
+            }
+        });
+        //Validacion campo phoneUserEdit
+        document.getElementById('phoneUserEdit').addEventListener('blur', function () {
+            if (document.getElementById('phoneUserEdit').value <= 0) {
+                mostrarMensajeError(phoneUserEdit, 'Ingrese Teléfono. ');
+                isValid = false;
+            } else {
+                ocultarMensajeError(phoneUserEdit);
+            }
+        });
+        //Validacion campo addressUserEdit
+        document.getElementById('addressUserEdit').addEventListener('blur', function () {
+            if (document.getElementById('addressUserEdit').value <= 0) {
+                mostrarMensajeError(addressUserEdit, 'Ingrese direccón. ');
+                isValid = false;
+            } else {
+                ocultarMensajeError(addressUserEdit);
+            }
+        });
+        //Validacion campo rolUserEdit
+        if (document.getElementById('rolUserEdit').value <= 0) {
+            mostrarMensajeError(rolUserEdit, 'Seleccione Tipo de Usuario. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(rolUserEdit);
+        }
+        if (isValid) {
+            var userModel = {
+
+                Id: document.getElementById('idUserEdit').value,
+                UserName: nameUserEdit.value,
+                UserLastName: lNameUserEdit.value,
+                UserEmail: emailUserEdit.value,
+                UserPhone: phoneUserEdit.value,
+                UserDir: addressUserEdit.value,
+                UserRolId: rolUserEdit.value,
+                UserPassword: document.getElementById('passUserEdit').value
+            }
+
+            updateUser(userModel);
+        }
+
+    }
+
+    // Enviar modelo al controller de crear
+    function saveUser(modelo) {
+        console.log(modelo)
+        $.ajax({
+            url: '/Users/Create',
+            type: 'POST',
+            data: { user: modelo },
+            success: function (data) {
+                if (data == "Ok") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Guardado con exito',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton:false
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            location.reload();
+                        }
+                    });
+                }
+            },
+            error: function () {
+                alert("Error al actualizar Datos");
+            }
+        });
+    }
+
+    // Enviar modelo al controller de editar
+    function updateUser(modelo) {
+        $.ajax({
+            url: '/Users/Edit',
+            type: 'POST',
+            data: { user: modelo },
+            success: function (data) {
+                if (data == "Ok") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Cambios guardados con exito',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton:false
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            location.reload();
+                        }
+                    });
+                } else {
+                    $('#modalUserEdit').modal('hide');
+                    alert("Registro existente\nNo hay nada que actualizar");
+                }
+            },
+            error: function () {
+                alert("Error al actualizar Datos");
+            }
+        });
+    }
+
+    // Función para eliminar un registro con confirmación
+    function delUser(id) {
+        swal.fire({
+            icon: 'question',
+            title: 'Eliminar usuario',
+            text: '¿Estas seguro que desea eliminar este registro?',
+            confirmButtonText: 'Si',
+            showCancelButton: true,
+            cancelButtonText: 'No',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/Users/Delete',
+                    data: { userId: id},
+                    success: function (data) {
+                        if (data == "Ok") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Registro eliminado con exito',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey: false
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    location.reload();
+                                }
+                            });
+                        }
+                    }
+                })
+            }
+        })
+
+    }
+
+    //Funcion para mostrar los mensajes de error
+    function mostrarMensajeError(elemento, mensaje) {
+        var mensajeError = elemento.nextElementSibling;
+        if (!mensajeError || !mensajeError.classList.contains('mensaje-error')) {
+            mensajeError = document.createElement('div');
+            mensajeError.classList.add('mensaje-error');
+            elemento.parentNode.insertBefore(mensajeError, elemento.nextSibling);
+        }
+        mensajeError.textContent = mensaje;
+    }
+
+    //Funcion para ocultar los mensajes de error
+    function ocultarMensajeError(elemento) {
+        var mensajeError = elemento.nextElementSibling;
+        if (mensajeError && mensajeError.classList.contains('mensaje-error')) {
+            mensajeError.parentNode.removeChild(mensajeError);
+        }
+    }
+</script>

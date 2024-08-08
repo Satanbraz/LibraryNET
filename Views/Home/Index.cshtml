@@ -1,0 +1,1516 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<style>
+    /* Estilos para los card de contadores */
+    .card {
+        border-radius: 5px;
+        box-shadow: 3px 3px 10px rgba(0, 30, 87, 0.751);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            transform: scale(1.08);
+        }
+
+    .card-title {
+        overflow: hidden; /* Oculta el texto que se desborde del contenedor */
+        text-overflow: ellipsis; /* Agrega puntos suspensivos (...) para indicar que hay más texto */
+        white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    }
+
+    .card-content {
+        padding: 20px;
+    }
+
+    .card-footer {
+        padding: 10px 20px;
+        background-color: #f6f7f9;
+        border-top: 1px solid #e0e0e0;
+        text-align: right;
+    }
+
+        .card-footer a {
+            text-decoration: none;
+            color: #6200ea;
+            font-weight: 500;
+        }
+
+    /* Estilo de los contenedores de iconos en los cards*/
+    .item-rounded-lg {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f6f7f9;
+        border-radius: 1.5rem;
+        width: 4rem;
+        height: 4rem;
+    }
+
+    /* Estilo para el mensaje de bienvenida al usuario */
+    .welcome-section {
+        background-color: #6200ea;
+        color: white;
+        padding: 2rem;
+        border-radius: 5px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .welcome-section h2 {
+            margin-bottom: 1rem;
+        }
+
+    /* Estilo para el contenedor de informacion importante */
+    .info-section {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    /* Estilos para los cards de informacion importante */
+    .info-card {
+        flex: 1;
+        margin: 0 10px;
+        padding: 20px;
+        background-color: #f6f7f9;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+        .info-card img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .info-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .info-card p {
+            color: #555;
+        }
+
+    /* Estilo para la seccion de libros recomendados */
+    .section-title {
+        font-size: 1.75rem;
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .table-title {
+        font-size: 1.75rem;
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    /* Estilo para las tablas */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    /* Estilos para headers y data en la tabla */
+    th, td {
+        padding: 12px 20px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #6200ea;
+        color: #fff;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Estilos para los data table de MD */
+    .mdc-data-table__table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .mdc-data-table__header-cell, .mdc-data-table__cell {
+        padding: 16px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .mdc-data-table__header-cell {
+        background-color: #6200ea;
+        color: #fff;
+    }
+
+    .mdc-data-table__cell {
+        color: #333;
+    }
+
+    /* Estilo para los botones de paginacion */
+    .page-link {
+        cursor: pointer;
+    }
+
+    /* Estilos para el carrusel de libros recomendados */
+    .MultiCarousel {
+        float: left;
+        overflow: hidden;
+        padding: 15px;
+        width: 100%;
+        position: relative;
+    }
+
+        .MultiCarousel .MultiCarousel-inner {
+            transition: 1s ease all;
+            float: left;
+        }
+
+            .MultiCarousel .MultiCarousel-inner .item {
+                float: left;
+                cursor: pointer;
+            }
+
+                .MultiCarousel .MultiCarousel-inner .item > div {
+                    text-align: center;
+                    padding: 10px;
+                    margin: 10px;
+                    background: #f1f1f1;
+                    color: #666;
+                }
+
+        .MultiCarousel .leftLst, .MultiCarousel .rightLst {
+            position: absolute;
+            border-radius: 50%;
+            top: calc(50% - 20px);
+        }
+
+        .MultiCarousel .leftLst {
+            left: 0;
+        }
+
+        .MultiCarousel .rightLst {
+            right: 0;
+        }
+
+            .MultiCarousel .leftLst.over, .MultiCarousel .rightLst.over {
+                pointer-events: none;
+                background: #ccc;
+            }
+            .table-sell thead tr th{
+                max-width: 20px;
+            }
+
+    /* Estilo para el input rut dentro del Sweet Alert */
+    .rut-input {
+        margin-left: 23%;
+    }
+
+    /* Estilo para el Sweet Alert tipo icono de carga */
+    .loading-swal {
+        background: rgb(255, 255, 255, .0);
+        backdrop-filter: blur(0px);
+    }
+
+    /* Personaliza el spinner de carga */
+    .loading-swal .swal2-loader {
+        width: 180px;
+        height: 180px;
+    }
+</style>
+
+
+<div class="panel">
+    <main>
+        <!-- Inicio pagina de inicio Admin -->
+        @if (Convert.ToInt32(Session["UserRole"]) == 1)
+        {
+            <!-- Botones de accion Admin -->
+            <section class="row">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h1 id="title">Dashboard</h1>
+                    </div>
+                    <div class="col-md-4 text-end d-flex justify-content-end align-items-center">
+                        <div class="col-md-6"><button class="btn btn-outline-primary" onclick="newSell()">Nueva Venta</button></div>
+                        <div class="col-md-6"><button class="btn btn-outline-secondary" onclick="newBorrow()">Nuevo Préstamo</button></div>
+                    </div>
+                </div>
+                <p class="lead">Dashboard</p>
+            </section>
+            <!-- fin botones de accion -->
+            <!-- Inicio seccion de contadores -->
+            <div class="row justify-content-center">
+                <div class="row">
+                    <!-- Inicio contador de usuarios -->
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body d-flex align-items-center justify-content-between">
+                                <div class="mb-0">
+                                    <H1>
+                                        @ViewBag.UsersCount
+                                    </H1>
+                                    <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Usuario(s)</dd>
+                                </div>
+                                <div class="item item-rounded-lg bg-body-light">
+                                    <i class="bi bi-people-fill fs-3"></i>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a class="d-flex align-items-center justify-content-between" href='/Users/UserList'>
+                                    <span style="text-align:end">Ver Registros</span>
+                                    <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fin contador de usuarios -->
+                    <!-- Inicio contador de Libros -->
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body d-flex align-items-center justify-content-between">
+                                <div class="mb-0">
+                                    <H1>
+                                        @ViewBag.BooksCount
+                                    </H1>
+                                    <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Titulo(s)</dd>
+                                </div>
+                                <div class="item item-rounded-lg bg-body-light">
+                                    <i class="fs-3"><img src="~/Content/media/svg/icons/Library/library-20-filled.svg" height="31" width="31" /></i>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a class="d-flex align-items-center justify-content-between" href='/Books/BooksList'>
+                                    <span style="text-align:end">Ver Registros</span>
+                                    <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fin contador de libros -->
+                    <!-- Inicio contador de Compras/Ventas -->
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body d-flex align-items-center justify-content-between">
+                                <div class="mb-0">
+                                    <H1>
+                                        @ViewBag.TotalBuysCount/@ViewBag.TotalSellsCount
+                                    </H1>
+                                    <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Compra(s)/Venta(s)</dd>
+                                </div>
+                                <div class="item item-rounded-lg bg-body-light">
+                                    <i class="fs-3"><img src="~/Content/media/svg/icons/Shopping/cart4.svg" height="31" width="31" /></i>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a class="d-flex align-items-center justify-content-between" href='/BuySell/AdminBuySellList'>
+                                    <span style="text-align:end">Ver Registros</span>
+                                    <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fin contador Compras/Ventas -->
+                    <!-- Inicio contador de Préstamos -->
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body d-flex align-items-center justify-content-between">
+                                <div class="mb-0">
+                                    <H1>
+                                        @ViewBag.TotalBorrowsCount
+                                    </H1>
+                                    <dd class="fs-sm fw-medium fs-sm fw-medium text-muted mb-0">Préstamo(s)</dd>
+                                </div>
+                                <div class="item item-rounded-lg bg-body-light">
+                                    <i class="fs-3"><img src="https://cdn-icons-png.flaticon.com/512/2417/2417787.png" height="34" width="34" /></i>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a class="d-flex align-items-center justify-content-between" href='/Borrow/AdminBorrowList'>
+                                    <span style="text-align:end">Ver Registros</span>
+                                    <i class="fa fa-arrow-alt-circle-right ms-1 opacity-25 fs-base"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fin contador Préstamos-->
+                </div>
+            </div>
+            <!-- Fin seccion contadores -->
+            <br />
+            <hr />
+            <br />
+            <!-- Inicio tabla de Ultimas transacciones de usuarios -->
+            <div class="card mdc-card">
+                <div class="card-header">Ordenes Recientes de Usuarios</div>
+                <div class="card-body">
+                    <div class="mdc-data-table">
+                        <table id="orders-table" class="mdc-data-table__table">
+                            <thead>
+                                <tr class="mdc-data-table__header-row">
+                                    <th class="mdc-data-table__header-cell" role="columnheader" scope="col">ID Orden</th>
+                                    <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Usuario</th>
+                                    <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Tipo</th>
+                                    <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Creado</th>
+                                    <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body">
+                                <!-- Aquí se cargarán las filas de la tabla con AJAX -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <nav aria-label="Page navigation">
+                        <ul id="pagination" class="pagination justify-content-end">
+                            <!-- Botones de paginación -->
+                        </ul>
+                    </nav>
+                </div>
+            </div> <!-- Fin tabla transacciones -->
+            <!-- Fin pagina de inicio Admin -->
+        }
+        else
+        {
+            <!-- Inicio pagina de inicio Usuario-->
+            <div class="container">
+                <!-- Inicio banner de Bienvenida -->
+                <div class="welcome-section">
+                    <h2>Bienvenido a nuestra Librería Online</h2>
+                    <p>Explora, compra y disfruta de los mejores títulos.</p>
+                </div>
+                <!-- Fin banner -->
+                <!-- Inicio seccion de informacion importante -->
+                <div class="info-section">
+                    <div class="info-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2417/2417787.png" alt="Préstamos">
+                        <h3>Préstamos</h3>
+                        <p>Revisa los registros de tus préstamos actuales y pasados.</p>
+                        <a class="btn btn-outline-primary" href='/Borrow/BorrowList'>Ver Préstamos</a>
+                    </div>
+                    <div class="info-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3500/3500833.png" alt="Compras">
+                        <h3>Compras</h3>
+                        <p>Visualiza tus compras y gestiona tus pedidos.</p>
+                        <a class="btn btn-outline-primary" href='/BuySell/BuyList'>Ver Compras</a>
+                    </div>
+                    <div class="info-card">
+                        <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" alt="Perfil">
+                        <h3>Perfil</h3>
+                        <p>Actualiza tu información personal y preferencias.</p>
+                        <a class="btn btn-outline-primary" href='/Users/UserData'>Ver Perfil</a>
+                    </div>
+                </div>
+                <!-- Fin seccion informacion importante -->
+                <hr>
+                <!-- Inicio Titulos Recomendados -->
+                <h2 class="section-title">Títulos Recomendados</h2>
+                <div class="container">
+                    <div class="row">
+                        <div class="MultiCarousel" data-items="1,3,3,3" data-slide="1" id="MultiCarousel" data-interval="1000">
+                            <div class="MultiCarousel-inner" id="Multicarousel-inner">
+                                <!--Card de los libros por AJAX-->
+                            </div>
+                            <button class="btn btn-primary leftLst"><</button>
+                            <button class="btn btn-primary rightLst">></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin Titulos Recomendados -->
+                <hr>
+
+                <div>
+                    <h2 class="section-title">Últimas Compras</h2>
+                    <div class="list-group">
+                        <!-- Aquí se cargarán las últimas compras con AJAX -->
+                    </div>
+                </div>
+
+            </div>
+            <!-- Fin pagina de inicio Admin -->
+        }
+
+        <br />
+        <hr>
+        <br />
+
+    </main>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        var itemsMainDiv = ('.MultiCarousel');
+        var itemsDiv = ('.MultiCarousel-inner');
+        var itemWidth = "";
+        $(document).ready(function () {
+            // Cargar la primera página de últimas transacciones al cargar la vista
+            lastTransactions(1);
+
+            LoadRecomendations();
+
+            $('.leftLst, .rightLst').click(function () {
+                var condition = $(this).hasClass("leftLst");
+                if (condition)
+                    click(0, this);
+                else
+                    click(1, this)
+            });
+
+            ResCarouselSize();
+
+            $(window).resize(function () {
+                ResCarouselSize();
+            });
+
+        });
+
+        let books = @Html.Raw(Json.Encode(ViewBag.AllBooks));
+        let selectedBooks = [];
+
+        /* Funciones de Compra */
+        // #region Sell Functions
+
+            // Funcion para mostrar el Modal de carrito de compra
+            function newSell() {
+                swal.fire({
+                    html: `<div>
+                    <h2> Nueva Venta</h2>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input class="form-control" type="text" id="barcodeInput" placeholder="Ingrese código de barras" oninput="searchBook()">
+                        </div>
+                    </div>
+                    <hr/>
+                    <br/>
+                    <div class="book-list" id="bookList">
+                        <table class="table table-sell">
+                            <thead>
+                                <tr>
+                                    <th>Libro</th>
+                                    <th>Autor</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>total Q</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookListBody">
+                                <!-- Lista de libros se llenará aquí dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr/>
+                    <div class="total-details text-end">
+                        <div>
+                            <span class="subtotal-label">Subtotal:</span>
+                            <span class="subtotal-amount" id="subtotalAmount">$0.00</span>
+                        </div>
+                        <div>
+                            <span class="IVA-label">IVA:</span>
+                            <span class="IVA-amount" id="IVAamount">$0.00</span>
+                        </div>
+                        <div>
+                            <span class="total-label">Total a Pagar:</span>
+                            <span class="total-amount" id="totalAmount">$0.00</span>
+                        </div>
+                    </div>
+                    <br/>
+                    <button class="btn btn-outline-success btn-complete-sale" onclick="completeSale()">Completar Venta</button>
+                    <button class="btn btn-outline-danger btn-null-sale" onclick="cancelSale()">Anular Venta</button>
+                </div>`,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    width: 1200
+                });
+            }
+
+            // Busqueda de Libro por codigo de barra
+            function searchBook() {
+                const barcodeInput = document.getElementById('barcodeInput');
+                const barcode = barcodeInput.value;
+                const book = books.find(b => b.BookBC === barcode);
+
+                if (book) {
+                    if (!book.BookPrice) {
+                        alert('El libro encontrado no tiene un precio definido.');
+                        barcodeInput.value = ''; // Limpiar el input
+                        return;
+                    }
+
+                    const existingBookIndex = selectedBooks.findIndex(b => b.BookBC === barcode);
+                    if (existingBookIndex !== -1) {
+                        selectedBooks[existingBookIndex].quantity++;
+                    } else {
+                        selectedBooks.push({ ...book, quantity: 1 });
+                    }
+
+                    renderBookList();
+                    updateTotal();
+                } else {
+                    alert('Libro no encontrado');
+                }
+                barcodeInput.value = ''; // Limpiar el input
+            }
+
+            // Carga de la fila con los detalles del libro
+            function renderBookList() {
+                const bookListBody = document.getElementById('bookListBody');
+                bookListBody.innerHTML = '';
+
+                selectedBooks.forEach((book, index) => {
+                    const row = document.createElement('tr');
+                    row.className = 'sell-item';
+
+                    var inputId = document.createElement('input')
+                    inputId.type = 'hidden';
+                    inputId.className = 'book-id';
+                    inputId.value = book.Id;
+
+                    const bookTitle = document.createElement('td');
+                    bookTitle.className = 'book-title';
+                    bookTitle.textContent = book.Title;
+                    bookTitle.style.whiteSpace = 'nowrap'
+
+                    const bookAuthor = document.createElement('td');
+                    bookAuthor.textContent = book.Author;
+
+                    const bookPrice = document.createElement('td');
+                    bookPrice.className = 'book-price';
+                    bookPrice.value = book.BookPrice
+                    bookPrice.textContent = book.BookPrice ? `$${book.BookPrice.toLocaleString('cl-CL')}` : 'Precio no disponible';
+
+                    const quantityCell = document.createElement('td');
+                    const quantityDiv = document.createElement('div');
+                    quantityDiv.classList = 'quantity-control d-flex justify-content-center';
+
+                    const decrementButton = document.createElement('button');
+                    decrementButton.textContent = '-';
+                    decrementButton.className = 'btn btn-secondary';
+                    decrementButton.onclick = function () {
+                        updateQuantity(index, book.quantity - 1);
+                    };
+
+                    const quantityInput = document.createElement('input');
+                    quantityInput.type = 'text';
+                    quantityInput.className = 'form-control book-q'
+                    quantityInput.style.width = '60px'
+                    quantityInput.value = book.quantity;
+                    quantityInput.readOnly = true;
+
+                    const incrementButton = document.createElement('button');
+                    incrementButton.textContent = '+';
+                    incrementButton.className = 'btn btn-secondary';
+                    incrementButton.onclick = function () {
+                        updateQuantity(index, book.quantity + 1);
+                    };
+
+                    quantityDiv.appendChild(decrementButton);
+                    quantityDiv.appendChild(quantityInput);
+                    quantityDiv.appendChild(incrementButton);
+                    quantityCell.appendChild(quantityDiv);
+
+                    const precioQ = document.createElement('td');
+                    precioQ.id = `precioQ-${index}`;
+                    precioQ.textContent = calculateTotalPrice(book.BookPrice, book.quantity);
+
+                    const actionsCell = document.createElement('td');
+                    const removeButton = document.createElement('button');
+                    removeButton.textContent = 'Eliminar';
+                    removeButton.className = 'btn btn-danger';
+                    removeButton.onclick = function () {
+                        removeBook(index);
+                    };
+                    actionsCell.appendChild(removeButton);
+
+                    row.appendChild(inputId)
+                    row.appendChild(bookTitle);
+                    row.appendChild(bookAuthor);
+                    row.appendChild(bookPrice);
+                    row.appendChild(quantityCell);
+                    row.appendChild(precioQ);
+                    row.appendChild(actionsCell);
+
+                    bookListBody.appendChild(row);
+                });
+            }
+
+            // Actualiza el precio de los libros por fila
+            function updateQuantity(index, quantity) {
+                if (quantity < 1) quantity = 1;
+                selectedBooks[index].quantity = parseInt(quantity);
+
+                // Actualizar el input de cantidad
+                const quantityInput = document.querySelectorAll('.quantity-control input')[index];
+                quantityInput.value = quantity;
+
+                // Actualizar el precioQ correspondiente a la fila modificada
+                const book = selectedBooks[index];
+                const precioQCell = document.getElementById(`precioQ-${index}`);
+                precioQCell.textContent = calculateTotalPrice(book.BookPrice, book.quantity);
+
+                updateTotal();
+            }
+
+            // Calcula el valor segun cantidad
+            function calculateTotalPrice(price, quantity) {
+                return price ? `$${(price * quantity).toLocaleString('cl-CL')}` : 'Precio no disponible';
+            }
+
+            // Elimina un libro del carrito de compras
+            function removeBook(index) {
+                selectedBooks.splice(index, 1);
+                renderBookList();
+                updateTotal();
+            }
+
+            // Actualiza los totales
+            function updateTotal() {
+                let subtotal = 0;
+                selectedBooks.forEach(book => {
+                    subtotal += book.BookPrice * book.quantity;
+                });
+
+                var IVA = subtotal * 0.19;
+                var total = subtotal + IVA;
+
+                document.getElementById('subtotalAmount').textContent = `$${subtotal.toLocaleString('cl-CL')}`;
+                document.getElementById('IVAamount').textContent = `$${IVA.toLocaleString('cl-CL')}`;
+                document.getElementById('totalAmount').textContent = `$${total.toLocaleString('cl-CL')}`;
+
+            }
+
+            // Finaliza la compra
+            function completeSale() {
+                if (selectedBooks.length === 0) {
+                    alert('No hay libros en el carrito');
+                } else {
+                    var bookid;
+                    var bookq;
+                    var bookprice;
+                    var booktitle;
+                    var sellModel = [];
+                    var bookDetail = [];
+                    var sellDetailModel = [];
+
+                    sellModel = {
+                        IdUser: @Session["UserId"].ToString(),
+                        PhoneUser: '@Session["UserPhone"].ToString()',
+                        DirUser: '@Session["UserDir"].ToString()',
+                        ProductsQ: document.querySelectorAll('.quantity-control input').length,
+                        bookList: []
+                    }
+
+                    document.querySelectorAll('.sell-item').forEach(function (item) {
+
+                        bookid = item.querySelector('.book-id').value
+                        bookq = item.querySelector('.book-q').value
+                        bookprice = item.querySelector('.book-price').value
+                        booktitle = item.querySelector('.book-title').textContent
+
+                        console.log("titulo: " + booktitle)
+
+                        sellModel.bookList.push({
+                            Title: booktitle
+                        })
+
+                        sellDetailModel.push({
+
+                            SellProductId: bookid,
+                            SellBookQ: bookq,
+                            BookPrice: bookprice
+                        })
+                    })
+
+                    // Reset variables
+                    selectedBooks = [];
+                    document.getElementById('totalAmount').textContent = '$0.00';
+                    document.getElementById('bookListBody').innerHTML = '';
+
+                    swal.fire({
+                        icon: 'question',
+                        text: '¿Deseas ingresar Rut?',
+                        showCancelButton: true,
+                        cancelButtonText: 'No'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            swal.fire({
+                                text: 'Ingrese Rut',
+                                input: 'text',
+                                inputPlaceholder: '12345678-0',
+                                showDenyButton: true,
+                                denyButtonText:'Cancelar',
+                                allowEscapeKey: false,
+                                allowOutsideClick: false,
+                                customClass: {
+                                    input: 'rut-input'
+                                },
+                                preConfirm: (rut) => {
+                                    if (rut != '') {
+                                        return rut;
+                                    } else {
+                                        Swal.showValidationMessage('Debe de ingresar Rut');
+                                        return;
+                                    }
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    sellModel.RutClient = result.value
+
+                                    // console.log("sellModel: " + sellModel);
+                                    // console.log("sellDetailModel: " + sellDetailModel);
+
+                                    sendToSellController(sellModel, sellDetailModel)
+
+                                } else if (result.isDenied) {
+                                    swal.fire({
+                                        icon: 'info',
+                                        text: 'Venta cancelada',
+                                        showConfirmButton: false,
+                                        timer: 2000,
+                                        allowEscapeKey: false,
+                                        allowOutsideClick: false,
+                                    })
+                                }
+                            })
+                        } else {
+                            // console.log("sellModel: " + sellModel);
+                            // console.log("sellDetailModel: " + sellDetailModel);
+
+                            sendToSellController(sellModel, sellDetailModel)
+                        }
+                    })
+                }
+            }
+
+            // Cancela la compra
+            function cancelSale() {
+            // Reset variables
+            selectedBooks = [];
+            document.getElementById('totalAmount').textContent = '$0.00';
+            document.getElementById('bookListBody').innerHTML = '';
+            Swal.close()
+        }
+
+            // Enviar la data al controller
+            function sendToSellController(sell, sellDetail) {
+                $.ajax({
+                    url: '/BuySell/ProcessSellPayment',
+                    type: 'POST',
+                    data: { sellModel: sell, sellDetailModel: sellDetail },
+                    success: function (data) {
+                        if (data == "Ok") {
+                            Swal.fire({
+                                icon: "success",
+                                title: "¡Venta Exitosa!",
+                                showConfirmButton: false,
+                                timer: 3000
+                            }).then(function () {
+                                location.reload();;
+                            });
+                        } else {
+                            location.reload();
+                        }
+                    }
+                })
+            }
+
+        // #endregion
+
+        /* Funciones de Préstamo */
+        // #region Borrow Functions
+
+            // Funcion para mostrar el Modal de bolsa de préstamos
+            function newBorrow() {
+                Swal.fire({
+                    html: `<div>
+                            <h2>Nuevo Préstamo de Libro</h2>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input class="form-control" type="text" id="barcodeBorrowInput" placeholder="Ingrese código de barras" oninput="searchBorrowBook()">
+                                </div>
+                            </div>
+                            <hr/>
+                            <br/>
+                            <div class="book-list" id="borrowBookList">
+                                <table class="table table-loan">
+                                    <thead>
+                                        <tr>
+                                            <th>Libro</th>
+                                            <th>Autor</th>
+                                            <th>Fecha de Préstamo</th>
+                                            <th>Fecha de Devolución</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="borrowBookListBody">
+                                        <!-- Lista de libros se llenará aquí dinámicamente -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <hr/>
+                            <div class="total-details text-end">
+                                <div>
+                                    <span class="total-books-label">Total de Libros:</span>
+                                    <span class="total-books-count" id="totalBooksCount">0</span>
+                                </div>
+                            </div>
+                            <br/>
+                            <button class="btn btn-outline-success btn-complete-loan" onclick="completeBorrow()">Completar Préstamo</button>
+                            <button class="btn btn-outline-danger btn-null-loan" onclick="cancelBorrow()">Anular Préstamo</button>
+                        </div>`,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    width: 1200
+                });
+            }
+
+            // Busqueda de Libro por codigo de barra
+            function searchBorrowBook() {
+                const barcodeInput = document.getElementById('barcodeBorrowInput');
+                const barcode = barcodeInput.value;
+                const book = books.find(b => b.BookBC === barcode);
+
+                if (book) {
+                    const existingBookIndex = selectedBooks.findIndex(b => b.BookBC === barcode);
+                    if (existingBookIndex === -1) {
+                        selectedBooks.push({ ...book });
+                        renderBorrowBookList();
+                    } else {
+                        alert('Este libro ya está en la lista.');
+                    }
+                } else {
+                    alert('Libro no encontrado');
+                }
+                barcodeInput.value = ''; // Limpiar el input
+            }
+
+            // Carga de la fila con los detalles del libro
+            function renderBorrowBookList() {
+                const bookListBody = document.getElementById('borrowBookListBody');
+                bookListBody.innerHTML = '';
+
+                selectedBooks.forEach((book, index) => {
+                    const row = document.createElement('tr');
+                    row.className = 'loan-item';
+
+                    var inputId = document.createElement('input')
+                    inputId.type = 'hidden';
+                    inputId.className = 'book-id';
+                    inputId.value = book.Id;
+
+                    const bookTitle = document.createElement('td');
+                    bookTitle.className = 'book-title';
+                    bookTitle.textContent = book.Title;
+                    bookTitle.style.whiteSpace = 'nowrap';
+
+                    const bookAuthor = document.createElement('td');
+                    bookAuthor.textContent = book.Author;
+
+                    const borrowDate = document.createElement('td');
+                    const today = new Date().toLocaleDateString().split('T')[0];
+                    borrowDate.textContent = today;
+                    borrowDate.className = 'book-borrow-date';
+
+                    const returnDateCell = document.createElement('td');
+                    const returnDateInput = document.createElement('input');
+                    returnDateInput.className = 'form-control return-date';
+                    returnDateInput.type = 'datetime';
+                    returnDateCell.appendChild(returnDateInput);
+
+                    const actionsCell = document.createElement('td');
+                    const removeButton = document.createElement('button');
+                    removeButton.textContent = 'Eliminar';
+                    removeButton.className = 'btn btn-danger';
+                    removeButton.onclick = function () {
+                        removeBorrowBook(index);
+                    };
+                    actionsCell.appendChild(removeButton);
+
+                    row.appendChild(inputId)
+                    row.appendChild(bookTitle);
+                    row.appendChild(bookAuthor);
+                    row.appendChild(borrowDate);
+                    row.appendChild(returnDateCell);
+                    row.appendChild(actionsCell);
+
+                    bookListBody.appendChild(row);
+                });
+
+                flatpickr(".return-date", {
+                    minDate: 'today', // Establecer fecha minima permitida, día de solicitudde prestamo
+                    maxDate: calculateReturnDate(18), // Establecer fecha maxima permitida, 20 dias habiles contando el día de solicitudde prestamo
+                    defaultDate: calculateReturnDate(7),
+                    dateFormat: 'd-m-Y', // Formato de fecha
+                    locale: {
+                        firstDayOfWeek: 1// Establecer el primer día de la semana en lunes (0 para domingo, 1 para lunes, etc.)
+                    },
+                    disable: [
+                        function (date) {
+                            // Deshabilitar sabados y domingos
+                            return (date.getDay() === 0 || date.getDay() === 6);
+                        }
+                    ],
+                    "locale": "es"
+                });
+
+                updateTotalBooks();
+            }
+
+            // Calcula fechas finales
+            function calculateReturnDate(days) {
+                let date = new Date();
+                let count = 0;
+                while (count < days) {
+                    date.setDate(date.getDate() + 1);
+                    if (date.getDay() !== 0 && date.getDay() !== 6) { // No contar fines de semana
+                        count++;
+                    }
+                }
+                return date.toISOString().split('T')[0];
+            }
+
+            // Elimina un libro de la bolsa de préstamos
+            function removeBorrowBook(index) {
+                selectedBooks.splice(index, 1);
+                renderBorrowBookList();
+            }
+
+            // Actualiza la cantidad de libros
+            function updateTotalBooks() {
+                const totalBooks = document.querySelectorAll('.loan-item').length;
+                document.getElementById('totalBooksCount').textContent = totalBooks;
+            }
+
+            // Finaliza el préstamo
+            function completeBorrow() {
+                if (selectedBooks.length === 0) {
+                    alert('No hay libros en la bolsa');
+                } else {
+                    var bookid;
+                    var borrowModel = [];
+                    var borrowDetailModel = [];
+
+                    var borrowModel = {
+                        IdUser: @Session["UserId"].ToString(),
+                        ProductsQ: selectedBooks.length,
+                    };
+
+                    document.querySelectorAll('.loan-item').forEach(function (item) {
+                        bookid = item.querySelector('.book-id')
+                        bookBorrowDate = item.querySelector('.book-borrow-date')
+                        bookBorrowReturnDate = item.querySelector('.return-date');
+
+
+                        if (bookBorrowReturnDate.value == '' || bookBorrowReturnDate.value == null) {
+                            bookBorrowReturnDate.value = calculateReturnDate(7)
+                        }
+
+                        borrowDetailModel.push({
+
+                            BorrowProductId: bookid.value,
+                            BorrowDate: bookBorrowDate.textContent,
+                            BorrowReturnDate: bookBorrowReturnDate.value,
+                        });
+                    });
+
+                    // Reset variables
+                    selectedBooks = [];
+                    document.getElementById('totalBooksCount').textContent = '0';
+                    document.getElementById('borrowBookListBody').innerHTML = '';
+
+                    Swal.fire({
+                        text: 'Ingrese rut',
+                        input: 'text',
+                        inputPlaceholder: 'Ingrese Rut',
+                        showDenyButton: true,
+                        denyButtonText: 'Cancelar',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        customClass: {
+                            input: 'rut-input'
+                        },
+                        preConfirm: (comment) => {
+                            if (comment !== '') {
+                                return comment;
+                            } else {
+                                Swal.showValidationMessage('Debe ingresar rut para registrar préstamo');
+                            }
+                        }
+                    }).then((results) => {
+                        if (results.isConfirmed) {
+                            // icono de carga
+                            Swal.fire({
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                timer: 2000,
+                                customClass: {
+                                    popup: 'loading-swal'
+                                },
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    $.ajax({
+                                        url:'@Url.Action("SearchUserByRut","Users")',
+                                        data: { UserRut: results.value},
+                                        success: function (data) {
+                                            console.log(data)
+                                            if (data != null) {
+                                                swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Usuario encontrado',
+                                                    html:'<h3>¿Desea continuar con el proceso?</h3>' +
+                                                         '<hr/>' +
+                                                         '<br />' +
+                                                         '<div class="row">' +
+                                                             '<p>Nombre: '+data.UserName+' '+ data.UserLastName+'  </p>' +
+                                                             '<p>Rut: '+data.UserRut+'</p>' +
+                                                             '<p>Dirección: ' + data.UserDir + ' </p>' +
+                                                             '<p>Email: ' + data.UserEmail + ' </p>' +
+                                                             '<p>Teléfono: '+data.UserPhone+' </p>' +
+                                                          '</div>',
+                                                    confirmButtonText: 'Continuar',
+                                                    showDenyButton: true,
+                                                    denyButtonText:'Cancelar'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+
+                                                        borrowModel.IdClient = data.Id;
+                                                        borrowModel.UserRut = data.UserRut;
+                                                        borrowModel.PhoneUser = data.UserPhone;
+                                                        borrowModel.DirUser = data.UserDir;
+
+                                                        sendToBorrowController(borrowModel, borrowDetailModel);
+
+                                                    } else if (result.isDenied) {
+                                                        Swal.fire({
+                                                            icon: 'info',
+                                                            text: 'Préstamo cancelado',
+                                                            showConfirmButton: false,
+                                                            timer: 2000,
+                                                            allowEscapeKey: false,
+                                                            allowOutsideClick: false,
+                                                        });
+                                                    }
+                                                })
+                                            }
+                                        },
+                                        error: function () {
+                                            swal.fire({
+                                                icon: 'error',
+                                                title: 'Usuario no encontrado',
+                                                text: '¿Agregar nuevo usuario?',
+                                                confirmButtonText: 'Continuar',
+                                                showDenyButton: true,
+                                                denyButtonText: 'Cancelar'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    Swal.fire({
+                                                        title: 'Registro de Nuevo Usuario',
+                                                        html:
+                                                            '<div class="row">' +
+                                                            '<div class="col-md-6 text-start">' +
+                                                                    '<label for="nombre" class="form-label">Nombre</label>'+
+                                                                    '<input id="nombre" name="nombre" class="form-control" placeholder="Ingrese Nombre" required>' +
+                                                                '</div>' +
+                                                                '<div class="col-md-6 text-start">' +
+                                                                '<label for="apellido" class="form-label">Apellido</label>' +
+                                                                    '<input id="apellido" class="form-control" placeholder="Ingrese Apellido" required>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                            '<br />' +
+                                                            '<div class="row">' +
+                                                                '<div class="col-md-12 text-start">' +
+                                                                '<label for="direccion" class="form-label">dirección</label>' +
+                                                                    '<input id="direccion" class="form-control" placeholder="Ingrese Dirección" style="max-width:none" required>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                            '<br />' +
+                                                            '<div class="row">' +
+                                                                '<div class="col-md-6 text-start">' +
+                                                                    '<label for="telefono" class="form-label">Telefono</label>' +
+                                                                    '<input id="telefono" class="form-control" placeholder="+56 *********" required>' +
+                                                                '</div>' +
+                                                                '<div class="col-md-6 text-start">' +
+                                                                    '<label for="rut" class="form-label">Rut</label>' +
+                                                                    '<input id="rut" class="form-control" placeholder="12345678-9" required>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                            '<br />' +
+                                                            '<div class="row">' +
+                                                                '<div class="col-md-12 text-start">' +
+                                                                    '<label for="correoElectronico" class="form-label">Correo</label>' +
+                                                                    '<input id="correoElectronico" class="form-control" placeholder="alguien@ejemplo.cl" style="max-width:none" required>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                            '<br />' +
+                                                            '<div class="row">' +
+                                                                '<div class="col-md-6 text-start">' +
+                                                                    '<label for="contraseña" class="form-label">Contraseña</label>' +
+                                                                    '<input id="contrasena" type="password" class="form-control" placeholder="Contraseña" required>' +
+                                                                '</div>' +
+                                                                '<div class="col-md-6 text-start">' +
+                                                                    '<label for="repetirContraseña" class="form-label">Reingrese Contraseña</label>' +
+                                                                    '<input id="repetirContrasena" type="password" class="form-control" placeholder="Repetir Contraseña" required>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                            '<br />' +
+                                                            '<div class="radio-group">' +
+                                                                '<div class="row">' +
+                                                                    '<div class="col-md-6">' +
+                                                                        '<input id="userClient" name="userType" type="radio" class="swal2-radio" placeholder="Cliente" value="2" required>' +
+                                                                        '<label for="userClient" class="form-label"> Cliente</label>' +
+                                                                    '</div>' +
+                                                                    '<div class="col-md-6">' +
+                                                                        '<input id="userStudent" name="userType" type="radio" class="swal2-radio" placeholder="Repetir Contraseña" value="3" required>' +
+                                                                        '<label for="userStudent" class="form-label"> Estudiante</label>' +
+                                                                    '</div>' +
+                                                                '</div>' +
+                                                            '</div>',
+                                                        focusConfirm: false,
+                                                        preConfirm: () => {
+                                                            const nombre = document.getElementById('nombre').value;
+                                                            const apellido = document.getElementById('apellido').value;
+                                                            const direccion = document.getElementById('direccion').value;
+                                                            const telefono = document.getElementById('telefono').value;
+                                                            const rut = document.getElementById('rut').value;
+                                                            const correoElectronico = document.getElementById('correoElectronico').value;
+                                                            const contrasena = document.getElementById('contrasena').value;
+                                                            const repetirContrasena = document.getElementById('repetirContrasena').value;
+
+                                                            if (!nombre || !apellido || !direccion || !telefono || !rut || !correoElectronico || !contrasena || !repetirContrasena) {
+                                                                Swal.showValidationMessage('Por favor completa todos los campos');
+                                                            } else if (contrasena !== repetirContrasena) {
+                                                                Swal.showValidationMessage('Las contraseñas no coinciden');
+                                                            }
+
+                                                            var radios = document.querySelectorAll('input[name="userType"]');
+                                                            var selectedValue;
+                                                            radios.forEach(function (radio) {
+                                                                if (radio.checked) {
+                                                                    selectedValue = radio.value;
+                                                                }
+                                                            });
+                                                            
+                                                            if (selectedValue) {
+                                                                return {
+                                                                    UserName: nombre,
+                                                                    UserLastName: apellido,
+                                                                    UserDir: direccion,
+                                                                    UserPhone: telefono,
+                                                                    UserRut: rut,
+                                                                    UserEmail: correoElectronico,
+                                                                    UserPassword: contrasena,
+                                                                    UserRolId : selectedValue
+                                                                };
+                                                            } else {
+                                                                Swal.showValidationMessage('Por favor, seleccione un tipo de usuario.');
+                                                            }
+                                                            
+                                                        }
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+
+                                                            registerNewUser(result.value)
+                                                        }
+                                                    });
+                                                } else if (result.isDenied) {
+                                                    Swal.fire({
+                                                        icon: 'info',
+                                                        text: 'Préstamo cancelado',
+                                                        showConfirmButton: false,
+                                                        timer: 2000,
+                                                        allowEscapeKey: false,
+                                                        allowOutsideClick: false,
+                                                    });
+                                                }
+                                            })
+                                        }
+                                    })
+                                }
+                            });
+
+                            // Enviar los datos al controlador
+                            // sendToBorrowController(borrowModel, borrowDetailModel);
+                        } else if (result.isDenied) {
+                            Swal.fire({
+                                icon: 'info',
+                                text: 'Préstamo cancelado',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                allowEscapeKey: false,
+                                allowOutsideClick: false,
+                            });
+                        }
+                    });
+                }
+            }
+
+            // Cancela el préstamo
+            function cancelBorrow() {
+                // Reset variables
+                selectedBooks = [];
+                document.getElementById('totalBooksCount').textContent = '0';
+                document.getElementById('borrowBookListBody').innerHTML = '';
+                Swal.close();
+            }
+
+            // Enviar la data al controlador
+            function sendToBorrowController(borrow, borrowDetail) {
+                $.ajax({
+                    url: '/Borrow/ProcessBorrowRequest',
+                    type: 'POST',
+                    data: { borrowModel: borrow, borrowDetailModel: borrowDetail },
+                    success: function (data) {
+                        if (data == "Ok") {
+                            Swal.fire({
+                                icon: "success",
+                                title: "¡Préstamo Exitoso!",
+                                showConfirmButton: false,
+                                timer: 3000
+                            }).then(function () {
+                                location.reload();
+                            });
+                        } else {
+                            location.reload();
+                        }
+                    }
+                });
+            }
+
+        // #endregion
+
+
+        // Funcion para determinar el tamaño de los items
+        function ResCarouselSize() {
+            var incno = 0;
+            var dataItems = ("data-items");
+            var itemClass = ('.item');
+            var id = 0;
+            var btnParentSb = '';
+            var itemsSplit = '';
+            var sampwidth = $(itemsMainDiv).width();
+            var bodyWidth = $('body').width();
+            $(itemsDiv).each(function () {
+                id = id + 1;
+                var itemNumbers = $(this).find(itemClass).length;
+                btnParentSb = $(this).parent().attr(dataItems);
+                itemsSplit = btnParentSb.split(',');
+                $(this).parent().attr("id", "MultiCarousel" + id);
+
+
+                if (bodyWidth >= 1200) {
+                    incno = itemsSplit[3];
+                    itemWidth = sampwidth / incno;
+                }
+                else if (bodyWidth >= 992) {
+                    incno = itemsSplit[2];
+                    itemWidth = sampwidth / incno;
+                }
+                else if (bodyWidth >= 768) {
+                    incno = itemsSplit[1];
+                    itemWidth = sampwidth / incno;
+                }
+                else {
+                    incno = itemsSplit[0];
+                    itemWidth = sampwidth / incno;
+                }
+                $(this).css({ 'transform': 'translateX(0px)', 'width': itemWidth * itemNumbers });
+                $(this).find(itemClass).each(function () {
+                    $(this).outerWidth(itemWidth);
+                });
+
+                $(".leftLst").addClass("over");
+                $(".rightLst").removeClass("over");
+
+            });
+        }
+
+        // Funcion para mover los items
+        function ResCarousel(e, el, s) {
+            var leftBtn = ('.leftLst');
+            var rightBtn = ('.rightLst');
+            var translateXval = '';
+            var divStyle = $(el + ' ' + itemsDiv).css('transform');
+            var values = divStyle.match(/-?[\d\.]+/g);
+            var xds = Math.abs(values[4]);
+            if (e == 0) {
+                translateXval = parseInt(xds) - parseInt(itemWidth * s);
+                $(el + ' ' + rightBtn).removeClass("over");
+
+                if (translateXval <= itemWidth / 2) {
+                    translateXval = 0;
+                    $(el + ' ' + leftBtn).addClass("over");
+                }
+            }
+            else if (e == 1) {
+                var itemsCondition = $(el).find(itemsDiv).width() - $(el).width();
+                translateXval = parseInt(xds) + parseInt(itemWidth * s);
+                $(el + ' ' + leftBtn).removeClass("over");
+
+                if (translateXval >= itemsCondition - itemWidth / 2) {
+                    translateXval = itemsCondition;
+                    $(el + ' ' + rightBtn).addClass("over");
+                }
+            }
+            $(el + ' ' + itemsDiv).css('transform', 'translateX(' + -translateXval + 'px)');
+        }
+
+        // Se obtienen los elementos del boton del carousel
+        function click(ell, ee) {
+            var Parent = "#" + $(ee).parent().attr("id");
+            var slide = $(Parent).attr("data-slide");
+            ResCarousel(ell, Parent, slide);
+        }
+
+        // Funcion para cargar las ultimas transacciones (vista admin)
+        function lastTransactions(page) {
+            $.ajax({
+                url: '@Url.Action("LastTransactionsData", "Home")',
+                type: 'GET',
+                data: { page: page },
+                success: function (response) {
+                    // Procesar la respuesta y renderizar los datos en la tabla
+                    if (!response.Error) {
+                        var tableBody = $('#orders-table-body');
+                        tableBody.empty(); // Limpiar contenido actual de la tabla
+
+
+                        // Iterar sobre los datos y construir las filas de la tabla
+                        $.each(response.Orders, function (index, order) {
+
+                            var row = $('<tr>').addClass('mdc-data-table__row')
+                                .append($('<td>').addClass('mdc-data-table__cell').text(order.TrancId).attr('title',order.TrancId))
+                                .append($('<td>').addClass('mdc-data-table__cell').text(order.TrancUserName))
+                                .append($('<td>').addClass('mdc-data-table__cell').text(order.TrancType === 1 ? 'Compra' : 'Préstamo'))
+                                .append($('<td>').addClass('mdc-data-table__cell').text(order.TrancDate))
+                                .append($('<td>').addClass('mdc-data-table__cell').text(order.TrancAmount === 0 ? 'N/A' : '$' + order.TrancAmount.toLocaleString('cl-CL')));
+
+                            tableBody.append(row);
+                        });
+
+
+                        var pagination = $('#pagination');
+                        pagination.empty(); // Limpiar botones de paginación
+
+                        // Agregar botones de paginación
+                        if (response.TotalPages > 1) {
+                            if (response.CurrentPage > 1) {
+                                pagination.append($('<li>').addClass('page-item').append(
+                                    $('<a>').addClass('page-link').text('<').click(function () {
+                                        lastTransactions(response.CurrentPage - 1);
+                                    })
+                                ));
+                            }
+
+                            for (var i = 1; i <= response.TotalPages; i++) {
+                                var pageItem = $('<li>').addClass('page-item');
+                                var pageLink = $('<a>').addClass('page-link').text(i).click(function () {
+                                    lastTransactions(parseInt($(this).text()));
+                                });
+
+                                // Agregar clase active si es la página actual
+                                if (i === response.CurrentPage) {
+                                    pageItem.addClass('active');
+                                }
+
+                                pageItem.append(pageLink);
+                                pagination.append(pageItem);
+                            }
+
+                            if (response.CurrentPage < response.TotalPages) {
+                                pagination.append($('<li>').addClass('page-item').append(
+                                    $('<a>').addClass('page-link').text('>').click(function () {
+                                        lastTransactions(response.CurrentPage + 1);
+                                    })
+                                ));
+                            }
+                        }
+                    } else {
+                        console.error('Error al obtener órdenes:', response.Error);
+                    }
+                },
+                error: function (error) {
+                    console.error('Error en la solicitud AJAX:', error);
+                }
+            });
+        }
+
+        /* Cargar elementos recomendados desde el controlador*/
+        function LoadRecomendations() {
+            $.ajax({
+                url: '@Url.Action("Recomendations", "Books")',
+                method: 'GET',
+                success: function (data) {
+                    var carouselinner = $('#Multicarousel-inner');
+                    carouselinner.empty();
+                    $.each(data.Recomendations, function (index, libro) {
+                        var itemhtml = `<div class="item">
+                                            <div class="card" onclick="BookDetail(${libro.BookId})">
+                                                <img src="data:image/jpeg;base64,${libro.BookImage}" title="${libro.BookTitle}" >
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${libro.BookTitle}</h5>
+                                                    <p class="card-text">${libro.BookAuthor}</p>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                        carouselinner.append(itemhtml);
+                    });
+                    ResCarouselSize(); // ajustar tamaño de los elementos después de cargar
+                }
+            });
+        }
+
+        /* Redirigir a BookDetail */
+        function BookDetail(id) {
+            window.location.href = "/Books/BookDetail?bookId=" + id;
+        }
+
+        // Genera un nuevo registro de usuario
+        function registerNewUser(userModel) {
+            $.ajax({
+                url: '@Url.Action("UserRegister","Users")',
+                data: { user: userModel },
+                method: 'POST',
+                success: function (data) {
+                    if (data == 'Ok') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Usuario Registrado',
+                            text: 'El nuevo usuario ha sido registrado exitosamente.',
+                            showConfirmButton: false,
+                            timer: 3000
+                        })
+                        //    .then(function () {
+                        //    location.reload();
+                        //});
+                    } else {
+                        Swal.fire(
+                            'Usuario no Registrado',
+                            'Error al generar el nuevo registro.',
+                            'error'
+                        );
+                    }
+                }
+            })
+        }
+    </script>
+}

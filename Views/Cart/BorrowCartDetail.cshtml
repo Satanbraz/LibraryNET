@@ -1,0 +1,429 @@
+﻿@model IEnumerable<DTO.BorrowCart>
+
+@{
+    ViewBag.Title = "Solicitud de Préstamo";
+}
+<style>
+    /* Estilo para la imagen en el card */
+    .card img {
+        width: 80%;
+    }
+
+    /*.modal-vertical-centered .modal-dialog {
+        display: flex;
+        align-items: center;
+        min-height: calc(100% - 1rem);*/ /* Altura mínima del modal */
+    /*}*/
+
+    /* Estilos para los mensajes de error */
+    .mensaje-error {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px; /* Espacio entre el campo y el mensaje de error */
+        padding-left: 5px;
+    }
+
+    /* Estilo para input de fecha de prestamo en el Sweet alert */
+    .input-borrowDate {
+        cursor: pointer;
+        margin-left: 17%;
+        margin-top: 5%;
+        margin-bottom: 5%;
+    }
+
+    /* Estilo para input de fecha de devolucion en el Sweet alert */
+    .input-borrowReturnDate {
+        cursor: pointer;
+        margin-left: 17%;
+        margin-top: 5%;
+        margin-bottom: 5%;
+    }
+</style>
+
+<h2>Solicitud de Préstamo</h2>
+
+<!-- Lista de itemes de la bolsa -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="padding:1%">
+            <!-- Header de Bolsa de prestamo -->
+            <div class="row">
+                <div class="col-md-8">
+                    Detalle de Bolsa
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="row">
+                        <div class="col-md-8">
+
+                            <button class="btn btn-primary" onclick="location.href = '/Books/BooksList';">Seguir buscando</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-success" id="btnProcesarPrestamo">Solicitar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin header -->
+            <hr />
+            <!-- Detalle de libros en bolsa -->
+            <div class="card">
+                @foreach (var cart in Model)
+                {
+                    <div class="row cart-item" style="padding:1%">
+                        <!--- Hidden inputs -->
+                        <input type="hidden" class="book-title" value="@cart.Books.Title" />
+                        <input type="hidden" class="book-author" value="@cart.Books.Author" />
+                        <input type="hidden" class="book-id" value="@cart.Books.Id" />
+                        <input type="hidden" class="book-borrow-date" value="@cart.ItemBorrowDate" />
+                        <input type="hidden" class="book-borrow-return-date" value="@cart.ItemBorrowReturnDate" />
+                        <!-- Fin hidden inputs -->
+
+                        <!-- Detalles del libro -->
+                        <div class="col-md-5">
+                            <div class="media">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div>
+                                            <img class="card-img" src="data:image/jpeg;base64,@Convert.ToBase64String(cart.Books.BookImage)" title="@cart.Books.Title">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7" style="align-content:center">
+                                        <h5 class="mt-0">@cart.Books.Title</h5>
+                                        <p class="mb-0">@cart.Books.Author</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin detalles del libro -->
+
+                        <!-- Detalles de fechas de prestamo -->
+                        <div class="col-md-4" style="align-content:center; text-align:center">
+                            <label class="label-padding-top">Fecha Prestamo: </label>
+                            <p id="pBorrowDate">@cart.ItemBorrowDate.ToShortDateString()</p>
+                            <hr />
+                            <label class="label-padding-top">Fecha Devolución: </label>
+                            <p id="pBorrowReturnDate"> @cart.ItemBorrowReturnDate.ToShortDateString()</p>
+                        </div>
+                        <!-- Fin detalle de fechas -->
+
+                        <!-- Botones de accion -->
+                        <div class="col-md-3" style="align-content:center; text-align:-webkit-center">
+                            <div class="row" style="width:fit-content">
+                                <button class="btn btn-outline-danger btn-delete" onclick="DelFromBorrowCart(@cart.Id, @cart.Books.Id)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                    </svg>
+                                    Quitar
+                                </button>
+                            </div>
+                            <br />
+                            <div class="row" style="width:fit-content">
+                                <button class="btn btn-outline-warning btn-modify" onclick="ModifyDates(@cart.Id, @cart.Books.Id, '@cart.ItemBorrowDate')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                    </svg>
+                                    Cambiar Fechas
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Fin Botones de accion -->
+                    </div>
+                }
+            </div>
+            <!-- Fin detalle -->
+            <br />
+        </div>
+    </div>
+</div>
+<!-- Fin itemes -->
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            // Procesar Préstamo
+            document.getElementById("btnProcesarPrestamo").addEventListener('click', function () {
+                var bookid;
+                var borrowModel = [];
+                var borrowDetailModel = [];
+
+                borrowModel = {
+                    IdClient: @Session["UserId"].ToString(),
+                    PhoneUser: '@Session["UserPhone"].ToString()',
+                    DirUser: '@Session["UserDir"].ToString()',
+                    ProductsQ: @Model.Count(),
+                    UserRut: '@Session["UserRut"].ToString()'
+                }
+
+                document.querySelectorAll('.row.cart-item').forEach(function (item) {
+                    bookid = item.querySelector('.book-id')
+                    bookBorrowDate = item.querySelector('.book-borrow-date')
+                    bookBorrowReturnDate = item.querySelector('.book-borrow-return-date')
+
+                    borrowDetailModel.push({
+
+                        BorrowProductId: bookid.value,
+                        BorrowDate: bookBorrowDate.value,
+                        BorrowReturnDate: bookBorrowReturnDate.value,
+                    })
+                });
+
+                sendToController(borrowModel, borrowDetailModel)
+            });
+
+        });
+
+        // Funcion para eliminar el libro de la bolsa
+        function DelFromBorrowCart(cartId, bookId) {
+            Swal.fire({
+                title: "¿Quieres eliminar el libro de la solicitud?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Ok",
+                cancelButtonText: `Cancelar`,
+                cancelButtonColor: "red"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Cart/DelFromBorrowCart',
+                        type: 'POST',
+                        data: { idCart: cartId, idBook: bookId },
+                        success: function (data) {
+                            if (data == "Ok") {
+                                $.ajax({
+                                    url: '/Cart/FindBorrowCart',
+                                    type: 'GET',
+                                    success: function (data) {
+                                        if (data == 0) {
+                                            location.href = '/Books/BooksList';
+                                        } else {
+                                            location.reload();
+                                            actualizarTotales();
+                                        }
+                                    }
+                                })
+                            } else {
+                                alert("No se pudo eliminar el libro")
+                            }
+                        },
+                        error: function () {
+                            alert("Error al eliminar del carrito");
+                        }
+                    })
+                }
+            });
+
+        }
+
+        /* Funcion que muestra un modal para editar las fechas de prestamo */
+        function ModifyDates(cartId, bookId, borrowDate) {
+            const Now = new Date()
+            var dateNow = Date(Now.getDate(), Now.getMonth(), Now.getFullYear())
+            var maxDate = addBusinessDays(dateNow, 20)
+
+            var borrowCartModel = {
+                Id: cartId,
+                IdProduct: bookId
+            }
+
+            Swal.fire({
+                title: "Selecciona fecha que deseas cambiar",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Préstamo",
+                denyButtonText: `Devolución`,
+                denyButtonColor: 'purple',
+                footer: '<a href="#" onClick="changeRules()">Reglas de cambio de Fechas</a>'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Ingresa nueva Fecha de Préstamo',
+                        html: '<label>Si no ingresas, la fecha se mantendrá</label>' +
+                            '<br />' +
+                            '<input type="datetime" class="form-control input-borrowDate" id="borrowDate" name="borrowDate" required>',
+                        showConfirmButton: true,
+                        showCancelButton: true,
+                        cancelButtonText: 'Cancelar',
+                        cancelButtonColor: 'red',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        preConfirm: () => {
+                            var borrowDate = document.getElementById('borrowDate').value;
+                            if (!borrowDate) {
+                                Swal.showValidationMessage('Por favor, ingresa una fecha');
+                                return false;
+                            }
+                            return borrowDate;
+                        },
+                        willOpen: (function () {
+                            flatpickr("#borrowDate", {
+                                minDate: 'today',
+                                maxDate: maxDate, // Establecer fecha maxima permitida
+                                dateFormat: 'd-m-Y', // Formato de fecha
+                                locale: {
+                                    firstDayOfWeek: 1// Establecer el primer día de la semana en lunes (0 para domingo, 1 para lunes, etc.)
+                                },
+                                disable: [
+                                    function (date) {
+                                        // Deshabilitar sabados y domingos
+                                        return (date.getDay() === 0 || date.getDay() === 6);
+                                    }
+                                ],
+                                "locale": "es"
+                            });
+                        })
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            var nFechaPrestamo = $('#borrowDate').val();
+                            var nFechaPrestamoSplit = nFechaPrestamo.split("-")
+                            var fechaPrestamoDate = new Date(nFechaPrestamoSplit[2], nFechaPrestamoSplit[1] - 1, nFechaPrestamoSplit[0]);
+                            var nfechaDevolucion = addBusinessDays(fechaPrestamoDate, 6)
+
+                            borrowCartModel.ItemBorrowDate = nFechaPrestamo,
+                            borrowCartModel.ItemBorrowReturnDate = nfechaDevolucion.toLocaleDateString()
+
+                            sendToModifyController(borrowCartModel)
+
+                            $('#borrowDate').val("")
+                            location.reload()
+                        }
+                    })
+                } else if (result.isDenied) {
+                    var fechaPrestamoSplit = borrowDate.split("-")
+                    var minDate = new Date(fechaPrestamoSplit[2].substring(0, 4), fechaPrestamoSplit[1] - 1, fechaPrestamoSplit[0])
+                    maxDate = addBusinessDays(new Date(fechaPrestamoSplit[2].substring(0, 4), fechaPrestamoSplit[1] - 1, fechaPrestamoSplit[0]), 19)
+
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Ingresa Fecha de Devolución',
+                        html: '<label>Si no ingresas, la fecha se mantendrá</label>' +
+                            '<br />' +
+                            '<input type="datetime" class="form-control input-borrowReturnDate" id="borrowReturnDate" name="borrowReturnDate" required>',
+                        showConfirmButton: true,
+                        showCancelButton: true,
+                        cancelButtonText: 'Cancelar',
+                        cancelButtonColor: 'red',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        preConfirm: () => {
+                            var borrowReturnDate = document.getElementById('borrowReturnDate').value;
+                            if (!borrowReturnDate) {
+                                Swal.showValidationMessage('Por favor, ingresa una fecha de devolución');
+                                return false;
+                            }
+                            return borrowReturnDate;
+                        },
+                        willOpen: (function () {
+                            flatpickr("#borrowReturnDate", {
+                                minDate: minDate,
+                                maxDate: maxDate, // Establecer fecha maxima permitida, 7 dias habiles contando el día de solicitudde prestamo
+                                dateFormat: 'd-m-Y', // Formato de fecha
+                                locale: {
+                                    firstDayOfWeek: 1// Establecer el primer día de la semana en lunes (0 para domingo, 1 para lunes, etc.)
+                                },
+                                disable: [
+                                    function (date) {
+                                        // Deshabilitar sabados y domingos
+                                        return (date.getDay() === 0 || date.getDay() === 6);
+                                    }
+                                ],
+                                "locale": "es"
+                            });
+                        })
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            var nFechaDevolucion = $('#borrowReturnDate').val();
+
+                            borrowCartModel.ItemBorrowDate = borrowDate
+                            borrowCartModel.ItemBorrowReturnDate = nFechaDevolucion
+
+                            sendToModifyController(borrowCartModel)
+
+                            $('#borrowReturnDate').val("")
+                            location.reload()
+                        }
+                    })
+                }
+            });
+        }
+
+        // Funcion para agregar dias habiles despues de la fecha de prestamo
+        function addBusinessDays(startDate, days) {
+            var currentDate = new Date(startDate);
+            var addedDays = 0;
+            while (addedDays < days) {
+                currentDate.setDate(currentDate.getDate() + 1);
+                // Omitir Fines de Semana
+                if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
+                    addedDays++;
+                }
+            }
+            return currentDate;
+        }
+
+        // Enviar fechas nuevas para cambiar al controller
+        function sendToModifyController(model) {
+            $.ajax({
+                url: '/Cart/ModifyBorrowCartDates',
+                type:'POST',
+                data: { borrowCart: model },
+                success: function (data) {
+                    if (data == "Ok") {
+                        Swal.fire({
+                            icon: "success",
+                            title: "¡Cambio Correcto!",
+                            showConfirmButton: false,
+                            timer: 3000
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                }
+            })
+        }
+
+        // funcion para mostrar las reglas de cambio
+        function changeRules() {
+            Swal.fire({
+                title:"Reglas de cambio de Fechas",
+                html: "<h5 style='color:red'>Cambio de fecha de Préstamo: </h5>"+
+                        "<p>Cuando se modifique la fecha de Préstamo, se calculará un tiempo máximo de prestamo de 7 dias (incluyendo el dia actual), omitiendo los días del fin de semana.</p> "+
+                        "<p>(Puedes cambiar la fecha de entrega luego de haber modificado la fecha de Préstamo)</p>"+
+                    "<h5 style='color:red'>Cambio de fecha de Entrega:</h5>" +
+                        "<p>Puedes cambiar la fecha de Entrega dentro de un lapso máximo de 20 dias hábiles, a partir de la fecha de hoy (incluyendo el día actual)</p>"
+            })
+        }
+
+        // Enviar la data al controller
+        function sendToController(borrow, borrowDetail) {
+            $.ajax({
+                url: '/Borrow/ProcessBorrowRequest',
+                type: 'POST',
+                data: { borrowModel: borrow, borrowDetailModel: borrowDetail },
+                success: function (data) {
+                    if (data == "Ok") {
+                        Swal.fire({
+                            icon: "success",
+                            title: "¡Solicitud Exitosa!",
+                            text: "Pronto te avisaremos de tu registro",
+                            timer: 3000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                            allowEscapeKey: false,
+                            allowOutsideClick: false,
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                location.href = '/Books/BooksList';
+                            }
+                        });
+                    } else {
+                        location.reload();
+                        actualizarTotales();
+                    }
+                }
+            })
+        }
+
+    </script>
+}

@@ -1,0 +1,350 @@
+﻿@model IEnumerable<DTO.Genre>
+
+<style>
+    .modal-vertical-centered .modal-dialog {
+        display: flex;
+        align-items: center;
+        min-height: calc(100% - 1rem); /* Altura mínima del modal */
+    }
+
+    /* Estilos para los mensajes de error */
+    .mensaje-error {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px; /* Espacio entre el campo y el mensaje de error */
+    }
+
+    .panel-body {
+        margin-left: -4%;
+    }
+</style>
+
+<ol class="breadcrumb mb-4 mt-4">
+    <li class="breadcrumb-item"><a href="#">Admin</a></li>
+    <li class="breadcrumb-item active">Géneros</li>
+</ol>
+
+<!-- Modal Agregar Genero -->
+<div id="modalAddGenre" class="modal fade modal-vertical-centered" tabindex="-1" aria-labelledby="modalAddGenreLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAddGenreLabel">Agregar Género</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario de agregar Género -->
+                <form id="formaddEdit">
+                    <div class="mb-3">
+                        <label for="genreName" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="genreName" name="genreName" required>
+                    </div>
+                    <!-- Agrega más campos según tus necesidades -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="validarForm()">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin modal agregar -->
+
+<!-- Modal Editar Genero -->
+<div id="modalEditGenre" class="modal fade modal-vertical-centered" tabindex="-1" aria-labelledby="modalEditGenreLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditGenreLabel">Actualizar Género</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario de agregar Género -->
+                <form id="formEditGenre">
+                    <div class="mb-3">
+                        <label for="genreNameEdit" class="form-label">Nombre</label>
+                        <input type="hidden" id="idGenre" />
+                        <input type="text" class="form-control" id="genreNameEdit" name="genreNameEdit" required>
+                    </div>
+                    <!-- Agrega más campos según tus necesidades -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="validarFormEdit()">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin modal editar -->
+
+<!-- Contenedor -->
+<div class="card mb-4 panel">
+    <!-- Header del contenedor -->
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>Listado de Géneros
+    </div>
+    <!-- Fin header -->
+    <!-- Inicio Data -->
+    <div class="card-body">
+        <!-- Botones de accion -->
+        <div class="row">
+            <div class="text-end">
+                <button onclick="addGenre()" class="btn btn-primary">Agregar Género</button>
+            </div>
+        </div>
+        <!-- Fin botones -->
+
+        <!-- Tabla generos -->
+        <div class="table-primary">
+            <table border="0" class="table table-responsive">
+                <thead>
+                    <tr role="row">
+                        <th>Nombre</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var genre in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => genre.GenreName)</td>
+                            <!-- Botones de accion-->
+                            <td>
+                                <div class="form-actions no-color text-end">
+                                    <button type="button" class="btn btn-warning" onclick="editGenre('@genre.Id')" data-toggle="modal" data-target="#exampleModal" data-whatever="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                                        </svg>
+                                        Editar
+                                    </button>
+                                    <button type="button" class="btn btn-danger" onclick="delGenre('@genre.Id')" value="Eliminar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                        </svg>
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </td>
+                            <!--Fin botones-->
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- Fin tabla-->
+    </div>
+    <!-- Fin Data-->
+</div>
+<!-- Fin contenedor -->
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Cambia el título de la página
+        document.title = document.title.substring(0, document.title.lastIndexOf('-') + 1) + ' Generos';
+
+        $('#modalAddGenre').modal('hide');
+        $('#modalEditGenre').modal('hide');
+    });
+
+    // Mostrar el formulario de Crear
+    function addGenre() {
+        $('#modalAddGenre').modal('show');
+    }
+
+    // Mostrar el formulario de Editar
+    function editGenre(id) {
+        $('#modalEditGenre').modal('show');
+
+        $.ajax({
+            url: '/Genre/Details',
+            type: 'GET',
+            data: { id: id },
+            success: function (data) {
+
+                // console.log(data.GenreName);
+                // var dT = JSON.parse(data);
+
+                $('#idGenre').val(data.Id);
+                $('#genreNameEdit').val(data.GenreName);
+            },
+            error: function () {
+                alert("Error al cargar registro");
+            }
+        });
+
+    }
+
+    // Validar formulario crear
+    function validarForm() {
+
+        var isValid = true;
+
+        //Validacion campo genreName
+        if (document.getElementById('genreName').value == "") {
+            mostrarMensajeError(genreName, 'Ingrese Nombre. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(genreName);
+        }
+
+        if (isValid) {
+            var genreModel = {
+                GenreName: genreName.value
+            }
+
+            saveGenre(genreModel);
+        }
+    }
+
+    // Validar formulario editar
+    function validarFormEdit() {
+
+        var isValid = true;
+
+        //Validacion campo genreNameEdit
+        if (document.getElementById('genreNameEdit').value == "") {
+            mostrarMensajeError(genreNameEdit, 'Ingrese Nombre. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(genreNameEdit);
+        }
+
+        if (isValid) {
+            var genreModel = {
+
+                Id: document.getElementById('idGenre').value,
+                GenreName: genreNameEdit.value
+            }
+
+            updateGenre(genreModel);
+        }
+    }
+
+    // Enviar modelo al controller de crear
+    function saveGenre(modelo) {
+        $.ajax({
+            url: '/Genre/Create',
+            type: 'POST',
+            data: { genre: modelo },
+            success: function (data) {
+                if (data == "Ok") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Guardado con exito',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            location.reload();
+                        }
+                    });
+                } else if (data == "Exists") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Registro existente',
+                        text: 'No se realizó ningun cambio',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            location.reload();
+                        }
+                    });
+                }
+            },
+            error: function () {
+                alert("Error al registrar Datos");
+            }
+        });
+    }
+
+    // Enviar modelo al controller de editar
+    function updateGenre(modelo) {
+        $.ajax({
+            url: '/Genre/Edit',
+            type: 'POST',
+            data: { genre: modelo },
+            success: function (data) {
+                if (data == "Ok") {
+                    alert("Guardado con Exito");
+                    location.reload();
+                } else {
+                    $('#modalGenreEdit').modal('hide');
+                    alert("Registro existente\nNo hay nada que actualizar");
+                }
+            },
+            error: function () {
+                alert("Error al actualizar Datos");
+            }
+        });
+    }
+
+    // Función para eliminar un registro con confirmación
+    function delGenre(id) {
+        swal.fire({
+            icon: 'question',
+            title: 'Eliminar editorial',
+            text: '¿Estas seguro que desea eliminar este registro?',
+            confirmButtonText: 'Si',
+            showCancelButton: true,
+            cancelButtonText: 'No',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/Genre/Delete',
+                    data: { genreId: id },
+                    success: function (data) {
+                        if (data == "Ok") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Registro eliminado con exito',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey: false
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    location.reload();
+                                }
+                            });
+                        }
+                    },
+                    error: function () {
+                        alert("Error al eliminar el registro");
+                    }
+                })
+            }
+        })
+    }
+
+    //Funcion para mostrar los mensajes de error
+    function mostrarMensajeError(elemento, mensaje) {
+        var mensajeError = elemento.nextElementSibling;
+        if (!mensajeError || !mensajeError.classList.contains('mensaje-error')) {
+            mensajeError = document.createElement('div');
+            mensajeError.classList.add('mensaje-error');
+            elemento.parentNode.insertBefore(mensajeError, elemento.nextSibling);
+        }
+        mensajeError.textContent = mensaje;
+    }
+
+    //Funcion para ocultar los mensajes de error
+    function ocultarMensajeError(elemento) {
+        var mensajeError = elemento.nextElementSibling;
+        if (mensajeError && mensajeError.classList.contains('mensaje-error')) {
+            mensajeError.parentNode.removeChild(mensajeError);
+        }
+    }
+</script>

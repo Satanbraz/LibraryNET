@@ -1,0 +1,299 @@
+﻿@model IEnumerable<DTO.Borrows>
+
+@{
+    ViewBag.Title = "Administrar Préstamos";
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    /* Estilo barra de busqueda */
+    .search-bar {
+        margin-bottom: 20px;
+    }
+
+    /* Estilo Header de las transacciones */
+    .transaction-header {
+        background-color: #162e4d;
+        color: white;
+        padding: 10px;
+        margin-bottom: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    /* Estilo seccion detalles */
+    .transaction-details {
+        display: none;
+        margin-bottom: 20px;
+    }
+
+    /* Estilos tabla detalles */
+    .details-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .details-table th, .details-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .details-table th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+
+        .details-table td {
+            background-color: #fff;
+        }
+    
+    /* Estilo botones de accion */
+    .btn-action {
+        margin: 0 5px;
+    }
+
+    /* Estilo box de Sweet Alert */
+    .swal2-container {
+        z-index: 10000;
+    }
+
+    /* Estilo label de Sweet Alert */
+    .labelReturnDate {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    
+
+    
+</style>
+
+<h2>Administrar Préstamos</h2>
+<hr />
+
+<section>
+    <div class="search-bar">
+        <input type="text" id="searchInput" class="form-control" placeholder="ID de Transacción / Fecha" oninput="searchTransaction()">
+    </div>
+
+    <div id="transactionContainer">
+        @foreach (var borrow in Model.GroupBy(b => b.IdTransaction))
+        {
+            <!-- Header Transacciones -->
+            <div class="transaction-header" data-transaction-id="@borrow.Key" onclick="toggleDetails('@borrow.Key')">
+                <div class="row">
+                    <div class="col-md-6">
+                        ID de Transacción: @borrow.Key
+                    </div>
+                    <div class="col-md-6 text-end">
+                        Fecha de Transacción: @borrow.First().BorrowRegisterDate
+                    </div>
+                </div>
+            </div>
+            <!-- Fin Header -->
+            <!-- Seccion Detalles -->
+            <div id="details-@borrow.Key" class="transaction-details">
+                <!-- Tabla de detalles de Transaccion -->
+                <table class="details-table">
+                    <thead>
+                        <tr>
+                            <th>Título del Libro</th>
+                            <th>Fecha de Préstamo <a title="Fecha de inicio de préstamo"><i class="fas fa-info-circle"></i></a></th>
+                            <th>Fecha de Devolución <a title="Fecha de término de préstamo"><i class="fas fa-info-circle"></i></a></th>
+                            <th>Fecha de Entrega <a title="Fecha en la que se entregó el libro"><i class="fas fa-info-circle"></i></a></th>
+                            <th>Activo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in borrow.OrderByDescending(i => i.borrowDetail.BorrowDate))
+                        {
+                            <tr>
+                                <td>@item.books.Title</td>
+                                <td>@item.borrowDetail.BorrowDate.ToShortDateString()</td>
+                                <td>@item.borrowDetail.BorrowReturnDate.ToShortDateString()</td>
+                                <td>@item.borrowDetail.BorrowReturnedDate</td>
+                                <td>@item.borrowDetail.isActive</td>
+                                <td>
+                                    @if (item.borrowDetail.isActive == true)
+                                    {
+                                        <button class="btn btn-warning btn-sm btn-action" onclick="editBorrow('@item.IdTransaction', @item.borrowDetail.BorrowProductId, @item.Id, @item.borrowDetail.Id, '@item.books.Title')">Editar</button>
+                                        <button class="btn btn-danger btn-sm btn-action" onclick="markAsLost('@item.IdTransaction', '@item.books.Title')">Marcar como Perdido</button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <!--- Fin Tabla -->
+            </div>
+            <!-- Fin Detalles -->
+        }
+    </div>
+</section>
+
+<script>
+    // Función para mostrar/ocultar las tablas de registros
+    function toggleDetails(transactionId) {
+        const details = document.getElementById('details-' + transactionId);
+        details.style.display = details.style.display === 'none' || details.style.display === '' ? 'block' : 'none';
+    }
+
+    // Funcion para filtrar por Id de Transacción
+    function searchTransaction() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const headers = document.querySelectorAll('.transaction-header');
+
+        headers.forEach(header => {
+            const transactionId = header.textContent.toLowerCase();
+            const details = document.getElementById('details-' + header.dataset.transactionId);
+
+            if (transactionId.includes(input)) {
+                header.style.display = '';
+            } else {
+                header.style.display = 'none';
+                details.style.display = 'none';
+            }
+        });
+    }
+
+    // Modal de edicion de libro en prestamo
+    function editBorrow(idTransaction, bookId, borrowId, borrowDetailId, bookTitle) {
+        console.log(bookId, borrowId, borrowDetailId)
+        Swal.fire({
+            title: 'Editar Préstamo',
+            html: `
+                <div class="form-group">
+                    <p>${idTransaction}</p>
+                </div>
+                <div class="form-group">
+                    <label>${bookTitle}</label>
+                </div>
+                <br />
+                <div class="form-group labelReturnDate">
+                    <label>Nueva Fecha de Devolución</label>
+                    <input type="date" id="newReturnDate" class="form-control">
+                </div>
+                <br />
+                <div class="form-group">
+                    <button class="btn btn-primary" id="btnReturnBook" onclick="returnBook(${borrowId}, ${borrowDetailId}, ${bookId})">Regresar libro</button>
+                </div>`,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar',
+            cancelButtonText: 'Cancelar',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            preConfirm: () => {
+                const newReturnDate = document.getElementById('newReturnDate').value;
+                if (!newReturnDate) {
+                    Swal.showValidationMessage('La fecha de devolución es obligatoria');
+                }
+                return { newReturnDate: newReturnDate };
+            },
+            willOpen: (function () {
+                flatpickr("#newReturnDate", {
+                    minDate: 'today',
+                    dateFormat: 'd-m-Y', // Formato de fecha
+                    locale: {
+                        firstDayOfWeek: 1// Establecer el primer día de la semana en lunes (0 para domingo, 1 para lunes, etc.)
+                    },
+                    disable: [
+                        function (date) {
+                            // Deshabilitar sabados y domingos
+                            return (date.getDay() === 0 || date.getDay() === 6);
+                        }
+                    ],
+                    "locale": "es"
+                });
+            })
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Lógica para guardar la nueva fecha de devolución
+                console.log(result.value.newReturnDate);
+            }
+        });
+    }
+
+    // funcion para marcar como perdido un libro
+    function markAsLost(idTransaction, bookTitle) {
+        Swal.fire({
+            title: 'Marcar como Perdido',
+            text: `¿Está seguro de que quiere marcar el libro "${bookTitle}" de la transacción ${idTransaction} como perdido?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, marcar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Lógica para marcar el libro como perdido
+                console.log(`Libro "${bookTitle}" de la transacción ${idTransaction} marcado como perdido`);
+            }
+        });
+    }
+
+    // Modal de retorno de libro
+    function returnBook(idBorrow, idBorrowDetail, idBook) {
+        swal.fire({
+            icon: 'info',
+            text: 'Ingrese clave de Administrador',
+            input: 'password',
+            inputLabel: 'Contraseña',
+            inputPlaceholder: 'Ingrese Contraseña',
+            inputAttributes: {
+                autocapitalize: 'off',
+                autocorrect: 'off',
+                'style': 'margin-left: 23%;',
+            },
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            preConfirm: (password) => {
+                if (password === '@System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(Session["UserPass"].ToString()))') {
+                    return true;
+                } else {
+                    Swal.showValidationMessage('Contraseña incorrecta');
+                    return false;
+                }
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                var borrowDetailModel = {
+                    Id: idBorrowDetail,
+                    BorrowId: idBorrow,
+                    BorrowProductId: idBook,
+                    isActive: false
+                };
+
+                var isReturn = true;
+
+                sendToController(borrowDetailModel, isReturn )
+            }
+        });
+    };
+
+    // Función para enviar la data de libro a retornar
+    function sendToController(model, isReturn ) {
+        $.ajax({
+            url: '@Url.Action("EditBorrowDetail", "Borrow")',
+            data: { borrowDetail: model, isReturn: isReturn },
+            method: 'POST',
+            success: function (data) {
+                if (data == 'Ok') {
+                    swal.fire({
+                        icon: 'success',
+                        text: '¡Libro retornado con exito!',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
+                    }).then(function () {
+                        location.reload();
+                    })
+                }
+            }
+        })
+    }
+</script>

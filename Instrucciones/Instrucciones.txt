@@ -1,0 +1,18 @@
+1-Cambiar la cadena de conexion en el archivo 'DBConnectionProvider' del proyecto, 
+	en el metodo GetConnection(), de acuerdo a su servidor BD.
+
+2- Ejecutar el archivo 'Crear DB y Tablas.sql'
+
+3- Agregar un rol Admin en la tabla rol en la BD.
+4- Agregar un segundo rol que no sea admin (cliente, estudiante, etc),teniendo en cuenta
+	un usuario comprador.
+5- Agregar un usuario Admin, asociando el Id de rol 1.
+6- Agregar un segundo usuario diferente de Admin, asociando el id de rol diferente de Admin.
+
+7. Ejecutar los archivos 'Insert (Edits, Genres, State)'.
+
+Eso ya deberia de permitirles utilizar el sistema para agregar los demas registros, pero debe
+	tener en cuenta que el libro es lo ultimo que se agrega
+
+Pd: Puedes ejecutar el archivo 'Insert Books.sql' para agregar algunos registros de libros ya utilizados.
+
