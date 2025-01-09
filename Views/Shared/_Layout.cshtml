@@ -1,0 +1,601 @@
+﻿@using LibraryNET.Filters
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LibraryNet | @ViewBag.Title</title>
+
+    <!---Librerias para íconos, Font Awesome 4, 5 y Google-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src='https://kit.fontawesome.com/a33530bb41.js' crossorigin='anonymous'></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <!---Librerias de Scripts-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!---Libreria Sweet Alert-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Librerias de calendario FlatPicker-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.js"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+
+
+    <!--Componentes Material Design-->
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+
+    <!-- Hoja de estilos de iconos de Sweet Alert-->
+    <link rel="stylesheet" href="~/Content/sweetalert-icons.css">
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        div.content {
+            margin-left: 200px;
+            padding: 1px 16px;
+            width: 1250px;
+            margin-top: 56px;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Lato", sans-serif;
+        }
+
+        .body-content {
+            margin-left: 4%;
+            max-width: 93%
+        }
+
+        .panel {
+            margin-left: 4%
+        }
+
+        /* Estilos para el sidebar */
+        .sidenav {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            left: 0;
+            background-color: #fff;
+            box-shadow: 2px 2px 4px #0c1e35; /* Sombra al sidebar */
+            overflow-x: hidden;
+            transition: width 0.3s;
+            z-index: 1;
+            top: 0;
+        }
+
+            .sidenav aside {
+                padding: 0 10px;
+            }
+
+            .sidenav ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+
+                .sidenav ul li {
+                    padding: 10px 0;
+                    position: relative; /* Posición relativa para dropdown */
+                }
+
+                    .sidenav ul li a {
+                        display: block;
+                        color: #7d84ab;
+                        text-decoration: none;
+                        font-size: 16px;
+                        padding: 12px;
+                        transition: background-color 0.3s ease;
+                    }
+
+                        .sidenav ul li a:hover {
+                            background-color: #162e4d;
+                            color: white;
+                        }
+
+                    .sidenav ul li hr {
+                        color: #7d84ab
+                    }
+
+        /* Estilos navbar */
+        .navbar {
+            --bs-navbar-padding-x: 1rem;
+            margin-left: 255px;
+            background-color: white;
+            transition: top 0.3s; /* Transition effect when sliding down (and up) */
+        }
+
+        /* Estilos para los valores de sesión */
+        .session-info {
+            position: absolute;
+            bottom: 10%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: #7d84ab
+        }
+
+        /* Estilo contador carrito*/
+        .contador-carrito {
+            position: absolute;
+            right: 7px;
+            top: 30px;
+            background-color: aqua;
+        }
+
+        /* Estilo para los DropDowns */
+        .dropdown {
+            position: relative;
+        }
+
+            .dropdown .dropdown-menu {
+                margin-left: -278%;
+            }
+            /* Mostrar el dropdown-content al hacer clic en el dropdown-btn */
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+
+            .dropdown .dropdown-menu.show {
+                margin-top: 15%;
+                position: absolute;
+                background-color: #fff;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1;
+                width: 100%; /* Ancho total */
+                transition: display 0.3s ease;
+                top: 100%; /* Posición debajo del botón */
+                left: 0;
+            }
+
+            .dropdown .dropdown-menu a {
+                padding: 10px 15px;
+            }
+
+            .dropdown .dropdown-menu ul li {
+                list-style-type: none;
+                margin-left: -32px
+            }
+
+
+            .dropdown .dropdown-btn {
+                display: block;
+                background-color: transparent;
+                color: #7d84ab;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 12px;
+                text-decoration: none;
+                font-size: 16px;
+                transition: background-color 0.3s ease;
+            }
+
+                .dropdown .dropdown-btn:hover {
+                    background-color: #162e4d;
+                    color: white
+                }
+
+            .dropdown span svg path {
+                fill: #7d84ab;
+            }
+
+            .dropdown:hover span svg path {
+                background-color: #162e4d;
+                fill: white
+            }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            width: 100%; /* Ancho total */
+            transition: display 0.3s ease;
+            top: 100%; /* Posición debajo del botón */
+            left: 0;
+            border-radius: 3%;
+        }
+
+            .dropdown-content a {
+                color: #7d84ab;
+                padding: 12px;
+                text-decoration: none;
+                display: block;
+                transition: background-color 0.3s ease;
+            }
+
+                .dropdown-content a:hover {
+                    background-color: #162e4d;
+                    color: white
+                }
+    </style>
+</head>
+<body>
+    <!-- Navbar superior -->
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm fixed-top" id="navbar">
+        <div class="container">
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li>@Html.ActionLink("Acerca de", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Contacto", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                </ul>
+            </div>
+        </div>
+
+
+        <!-- Botones de accion en el navbar -->
+        <div class="d-sm-inline-flex justify-content-between">
+            <div class="row">
+                <!-- Boton de usuario -->
+                <ul class="nav flex-grow-2 col-md-4">
+                    <li>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-info" type="button" id="personaButton" title="@Session["UserName"] @Session["UserLName"]" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg width="24" height="24" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <ul>
+                                    <li>
+                                        <a class="dropdown-item" href="#" onclick="Logout()">Cerrar Sesión</a>
+                                    </li>
+                                    @if (!Html.IsHomePage() || Convert.ToInt32(Session["UserRole"]) == 1)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" href="#" onclick="GetUserData()">Configuración</a>
+                                        </li>
+
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <!-- Fin boton de usuario -->
+
+                @if (Convert.ToInt32(Session["UserRole"]) != 1)
+                {
+                    <!-- Boton de bolsa de prestamos -->
+                    <ul class="nav flex-grow-2 col-md-4">
+                        <li>
+                            <a class="btn btn-sm btn-outline-success btn-icon mr-2" title="Prestamos" onclick="viewBorrowCart()">
+                                <svg fill="currentColor" height="24px" width="24px" version="1.1" id="Layer_1" viewBox="0 0 509.117 509.117" xml:space="preserve">
+                                <path d="M500.965,256.162c-13.017-16.488-39.919-11.281-54.671-1.736l-75.498,50.332H255.378
+				                        c-1.736-1.736-2.603-5.207-2.603-7.81c0-3.471,1.736-7.81,4.339-10.414l51.2-17.356c15.62-6.942,28.637-28.637,21.695-45.993
+				                        c-2.603-6.075-7.81-11.281-14.753-13.885c-9.546-3.471-21.695-3.471-31.241,0.868l-77.234,26.034l-93.722,8.678
+				                        c-6.942,0-18.224,6.942-22.563,9.546l-59.878,25.166c-26.902,12.149-39.051,43.39-26.902,70.292l39.919,97.193
+				                        c0.868,2.603,2.603,4.339,5.207,5.207c1.736,0.868,2.603,0.868,3.471,0.868c1.736,0,2.603,0,3.471-0.868l102.4-51.2h154.468
+				                        c0.868,0,1.736,0,2.603-1.736l104.136-34.712c0.868,0,1.736,0,2.603-0.868l69.424-52.068
+				                        c8.678-6.075,14.753-17.356,16.488-28.637C508.775,272.65,507.039,263.104,500.965,256.162z M490.551,281.328
+				                        c-0.868,6.942-4.339,13.885-9.546,17.356l-68.556,51.2l-101.532,33.844H156.449c-1.736,0-2.603,0-4.339,0l-95.458,47.729
+				                        l-36.447-88.515c-7.81-18.224,0-39.051,18.224-47.729l60.746-26.034c0.868,0,0.868,0,1.736-0.868
+				                        c3.471-2.603,10.414-6.942,13.017-6.942l95.458-8.678c0.868,0,0.868,0,1.736,0l78.969-26.034
+				                        c3.471-0.868,6.942-1.736,10.414-1.736c2.603,0,5.207,0,7.81,0.868c2.603,0.868,4.339,2.603,5.207,4.339
+				                        c2.603,6.942-4.339,19.959-12.149,23.431l-52.068,17.356c-0.868,0.868-1.736,0.868-2.603,1.736
+				                        c-7.81,6.075-12.149,15.62-12.149,26.034c0.868,9.546,5.207,17.356,13.017,22.563c0.868,0.868,2.603,1.736,4.339,1.736h121.492
+				                        c1.736,0,3.471-0.868,3.471-1.736l78.102-52.068c9.546-6.075,26.902-8.678,32.108-1.736 C490.551,270.914,491.419,276.121,490.551,281.328z" />
+                                <path d="M60.992,175.457h52.068h34.712h225.627h34.712h52.068c5.207,0,8.678-3.471,8.678-8.678V62.643
+				                        c0-5.207-3.471-8.678-8.678-8.678H408.11h-34.712H147.772H113.06H60.992c-5.207,0-8.678,3.471-8.678,8.678v104.136
+				                        C52.314,171.985,55.785,175.457,60.992,175.457z M156.449,158.101v-86.78h208.271v86.78H156.449z M451.5,158.101h-34.712v-86.78
+				                        H451.5V158.101z M399.433,71.321v86.78h-17.356v-86.78H399.433z M139.094,71.321v86.78h-17.356v-86.78H139.094z M69.67,71.321 h34.712v86.78H69.67V71.321z" />
+                                <path d="M321.331,106.033H199.839c-5.207,0-8.678,3.471-8.678,8.678s3.471,8.678,8.678,8.678h121.492 c5.207,0,8.678-3.471,8.678-8.678S326.538,106.033,321.331,106.033z" />
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Fin boton bolsa -->
+
+                    <!-- Boton Carrito de compras -->
+                    <ul class="nav flex-grow-2 col-md-4">
+                        <li>
+                            <a class="btn btn-sm btn-outline-warning btn-icon mr-2" title="Carrito" onclick="viewCart()">
+                                <svg width="24" height="24" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+                                    <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
+                                </svg>
+                            </a>
+                            <span class="badge text-black ms-1 rounded-pill contador-carrito bg-light" id="contador_carrito"></span>
+                        </li>
+                    </ul>
+                    <!-- Fin boton carrito -->
+                }
+            </div>
+        </div>
+        <!-- Fin botones de accion -->
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidenav">
+        <aside>
+            <!-- Nav Links -->
+            <ul>
+                <li>
+                    <img src="~/Content/images/logo/LibraryNET.png" width="200" />
+                </li>
+                <li><a href="@Url.Action("Index", "Home")"><span>Inicio</span></a></li>
+                <li><a href="@Url.Action("BooksList", "Books")"><span>Catálogo</span></a></li>
+
+                @if (Convert.ToInt32(Session["UserRole"]) == 1)
+                {
+                    <li><a href="#"><span>Registros</span></a></li>
+                    <li><hr /></li>
+                    <li class="dropdown">
+                        <span class="dropdown-btn">
+                            Administración
+                            <span class="text-end">
+                                <svg width="24px" height="24px" viewBox="0 0 24 24">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+                                        <path d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z" id="Path-94" fill="#000000" fill-rule="nonzero" transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999) "></path>
+                                    </g>
+                                </svg>
+                            </span>
+                        </span>
+                        <ul class="dropdown-content">
+                            <li><a href="@Url.Action("UserList", "Users")">Usuarios</a></li>
+                            <li><a href="@Url.Action("GenreList", "Genre")">Géneros</a></li>
+                            <li><a href="@Url.Action("EditList", "Edit")">Editoriales</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <span class="dropdown-btn">
+                            Mis Registros
+                            <span class="text-end">
+                                <svg width="24px" height="24px" viewBox="0 0 24 24">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+                                        <path d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z" id="Path-94" fill="#000000" fill-rule="nonzero" transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999) "></path>
+                                    </g>
+                                </svg>
+                            </span>
+                        </span>
+                        <ul class="dropdown-content">
+                            <li><a href="#">Ventas</a></li>
+                            <li><a href="#">Préstamos</a></li>
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    <li><hr /></li>
+                    <li><a href='@Url.Action("BuyList","BuySell")'><span>Mis Compras</span></a></li>
+                    <li><a href='@Url.Action("BorrowList","Borrow")'><span>Mis Préstamos</span></a></li>
+                }
+            </ul>
+            <!-- Fin navlinks -->
+
+            <!-- Informacion de sesion -->
+            <div class="session-info">
+                @Session["UserName"] @Session["UserLName"]
+                <div id="sessionRemainingTime"> </div>
+            </div>
+            <!-- Fin informacion de session -->
+        </aside>
+    </div>
+    <!-- Fin Sidebar-->
+
+    <!-- Contenido principal -->
+    <div id="main">
+        <div class="content">
+            <div class="body-content">
+                @RenderBody()
+                
+            </div>
+            <div class="footer panel">
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - LibraryNET</p>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            GetCartCount();
+
+            /* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
+            var prevScrollpos = window.pageYOffset;
+            window.onscroll = function () {
+                var currentScrollPos = window.pageYOffset;
+                if (prevScrollpos > currentScrollPos) {
+                    document.getElementById("navbar").style.top = "0";
+                    document.getElementById("navbar").style.backgroundColor = "white";
+                } else {
+                    document.getElementById("navbar").style.top = "-50px";
+                    document.getElementById("navbar").style.backgroundColor = "white";
+                }
+                prevScrollpos = currentScrollPos;
+            }
+
+            // Funcion para mostrar el tiempo restante de sesion
+            function updateRemainingTime() {
+                $.ajax({
+                    url: '@Url.Action("RemainingTime", "Account")',
+                    type: 'GET',
+                    success: function(response) {
+                        if (response === "SessionExpired") {
+                            $("#sessionRemainingTime").text("La sesión ha expirado");
+                        } else {
+                            $("#sessionRemainingTime").text("Tiempo restante de sesión: " + response);
+                        }
+                    },
+                    error: function() {
+                        $("#sessionRemainingTime").text("Error al obtener el tiempo restante de sesión");
+                    }
+                });
+            }
+
+            // Actualizar el tiempo restante cada 1 segundos (1000 milisegundos)
+            setInterval(updateRemainingTime, 1000);
+        });
+
+        // Función para mostrar/ocultar el submenu al hacer clic en el enlace "Opciones"
+        document.addEventListener("DOMContentLoaded", function () {
+            // Obtener todos los elementos .dropdown-btn
+            var dropdowns = document.querySelectorAll(".dropdown-btn");
+
+            // Iterar sobre cada .dropdown-btn
+            dropdowns.forEach(function (dropdown) {
+                // Agregar evento clic a cada .dropdown-btn
+                dropdown.addEventListener("click", function () {
+                    var submenu = this.nextElementSibling;
+                    var isActive = submenu.style.display === "block";
+
+                    // Ocultar todos los submenus
+                    var allSubmenus = document.querySelectorAll(".dropdown-content");
+                    allSubmenus.forEach(function (sub) {
+                        sub.style.display = "none";
+                    });
+
+                    // Si el submenu actual no estaba activo, se muestra
+                    if (!isActive) {
+                        submenu.style.display = "block";
+                    }
+                });
+            });
+
+            // Cerrar submenús al hacer clic fuera de ellos
+            document.addEventListener("click", function (e) {
+                if (!e.target.matches(".dropdown-btn") && !e.target.closest(".dropdown-content")) {
+                    var allSubmenus = document.querySelectorAll(".dropdown-content");
+                    allSubmenus.forEach(function (sub) {
+                        sub.style.display = "none";
+                    });
+                }
+            });
+        });
+
+
+        // Función para mostrar/ocultar el submenu al hacer clic en el botón "Persona"
+        document.addEventListener('DOMContentLoaded', function () {
+            var personaButton = document.getElementById('personaButton');
+            var submenu = personaButton.nextElementSibling; // Obtener el siguiente elemento después del botón
+
+            personaButton.addEventListener('click', function (event) {
+                event.preventDefault(); // Evitar la acción predeterminada del botón
+
+                // Alternar la clase 'show' en el submenu
+                submenu.classList.toggle('show');
+            });
+        });
+
+        function viewCart() {
+            $.ajax({
+                url: '@Url.Action("FindCart", "Cart")',
+                type: 'GET',
+                success: function (data) {
+                    if (data == 1) {
+                        location.href = '/Cart/CartDetail';
+
+                    } else {
+                        Swal.fire({
+                            title: "¡Ups!",
+                            text: "No hay elementos en el Carrito",
+                            icon: "info"
+                        });
+                    }
+                },
+                error: function () {
+                    alert("Error al obtener el carrito")
+                }
+            })
+        }
+
+        function viewBorrowCart() {
+            $.ajax({
+                url: '@Url.Action("FindBorrowCart", "Cart")',
+                type: 'GET',
+                success: function (data) {
+                    if (data == 1) {
+                        location.href = '/Cart/BorrowCartDetail';
+
+                    } else {
+                        Swal.fire({
+                            title: "¡Ups!",
+                            text: "No hay solicitudes de Préstamo",
+                            icon: "info"
+                        });
+                    }
+                },
+                error: function () {
+                    alert("Error al obtener el carrito de Préstamos")
+                }
+            })
+        }
+
+        function Logout() {
+            $.ajax({
+                url: '@Url.Action("Logout", "Account")',
+                type: 'GET',
+                success: function () {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 1000,
+                        timerProgressBar: true
+                    });
+
+                    Toast.fire({
+                        icon: "success",
+                        title: "Ha finalizado sesión"
+                    }).then(function () {
+                        location.href = '/Account/Login';
+                    });
+                },
+                error: function() {
+                }
+            });
+        }
+
+        function GetCartCount() {
+            $.ajax({
+                url: '@Url.Action("QCart", "Cart")',
+                type: "GET",
+                data: null,
+                dataType: "json",
+                success: function (data) {
+                    if (data.cantidad >0) {
+                        $(".contador-carrito").text(data.cantidad);
+                    }
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        }
+
+        function GetUserData() {
+            $.ajax({
+                url: '@Url.Action("UserData", "Users")',
+                type: "GET",
+                success: function () {
+
+                    location.href = '/Users/UserData';
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        }
+    </script>
+</body>
+</html>

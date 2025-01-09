@@ -1,0 +1,503 @@
+﻿@model IEnumerable<DTO.Cart>
+
+@{
+    ViewBag.Title = "Carrito de Compras";
+}
+<style>
+    /* Estilo para la imagen en el card */
+    .card img {
+        width: 80%;
+    }
+
+    /* Estilo para los modal */
+    .modal-vertical-centered .modal-dialog {
+        display: flex;
+        align-items: center;
+        min-height: calc(100% - 1rem); /* Altura mínima del modal */
+    }
+
+    /* Estilos para los mensajes de error */
+    .mensaje-error {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px; /* Espacio entre el campo y el mensaje de error */
+        padding-left: 5px;
+    }
+</style>
+
+<h2>Carrito de Compras</h2>
+
+<!-- Modal de pago -->
+<div id="modalPayment" class="modal fade modal-vertical-centered" tabindex="-1" aria-labelledby="modalAddEditLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="card" style="padding:5%">
+                <div class="d-flex justify-content-between align-items-center"><span>Detalle de Tarjeta</span></div>
+                <span class="type d-block mt-3 mb-1">Tipo de tarjeta</span>
+                <div class="radio-group">
+                    <label class="radio"> <input type="radio" name="card" value="payment" checked id="master-card"> <span><img height="40" src="@Url.Content("~/Content/images/cards/master.png")" /></span> </label>
+                    <label class="radio ml-2"> <input type="radio" name="card" value="payment" id="visa-card"> <span><img height="40" src="@Url.Content("~/Content/images/cards/visa.png")" /></span> </label>
+                </div>
+                 <div>
+                    <label class="credit-card-label mb-1 mt-2">Nombre del Titular</label>
+                    <input type="text" class="form-control credit-inputs" placeholder="Nombre" id="trj_nombre">
+                </div>
+                <div>
+                    <label class="credit-card-label mb-1 mt-2">Número de tarjeta</label>
+                    <input type="text" class="form-control credit-inputs" placeholder="0000 0000 0000 0000" id="trj_numero">
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="credit-card-label mb-1 mt-2">Vigencia</label>
+                        <input type="text" class="form-control credit-inputs" placeholder="MM/YY" id="trj_vigencia">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="credit-card-label mb-1 mt-2">CVV</label>
+                        <input type="text" class="form-control credit-inputs" placeholder="000" id="trj_cvv">
+                    </div>
+                </div>
+                <hr class="line">
+                <div class="d-flex justify-content-between information"><span>Total a Pagar</span><span id="totalPagar"></span></div>
+                <button class="btn btn-primary btn-block mt-3" id="btnProcesarPago" type="button">Procesar Pago</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin modal de pago -->
+
+<!-- Lista de itemes del carrito -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="card" style="padding:1%">
+            <!-- Header de carrito de compras -->
+            <div class="row">
+                <div class="col-md-6">
+                    Detalle de carrito
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="btn btn-primary" onclick="location.href = '/Books/BooksList';">Seguir comprando</button>
+                </div>
+            </div>
+            <!-- Fin Header -->
+            <hr />
+            <!-- Detalle de libros en carrito -->
+            <div class="card">
+                @foreach (var cart in Model)
+                {
+                    <div class="row cart-item" style="padding:1%">
+                        <!-- Hidden inputs -->
+                        <input type="hidden" class="book-title" value="@cart.Books.Title" />
+                        <input type="hidden" class="book-author" value="@cart.Books.Author" />
+                        <input type="hidden" class="book-id" value="@cart.Books.Id" />
+                        <input type="hidden" class="book-price" value="@cart.Books.BookPrice" />
+                        <!-- Fin hidden inputs -->
+                        <!-- Detalles del libro -->
+                        <div class="col-md-5">
+                            <div class="media">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div>
+                                            <img class="card-img" src="data:image/jpeg;base64,@Convert.ToBase64String(cart.Books.BookImage)" title="@cart.Books.Title">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7" style="align-content:center">
+                                        <h5 class="mt-0">@cart.Books.Title</h5>
+                                        <p class="mb-0">@cart.Books.Author</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin detalles del libro -->
+
+                        <!-- Input de cantidad -->
+                        <div class="col-md-3" style="align-content:center">
+                            <div class="input-group" data-stock="@cart.Books.Stock">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-secondary btn-decrement" type="button" data-cart="@cart.Id" data-book="@cart.Books.Id">-</button>
+                                </div>
+                                <input type="text" disabled="disabled" class="form-control text-center quantity-input book-q" value="1">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary btn-increment" type="button">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin input cantidad -->
+
+                        <div class="col-md-2 price" style="align-content:center; text-align:center">$@cart.Books.BookPrice.ToString("N0")</div>
+
+                        <!-- Botones de accion -->
+                        <div class="col-md-2" style="align-content:center">
+                            <button class="btn btn-outline-danger btn-delete" onclick="DelFromCart(@cart.Id, @cart.Books.Id)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                </svg>
+                                Quitar
+                            </button>
+                        </div>
+                        <!-- Fin botones de accion -->
+                    </div>
+                }
+            </div>
+            <!-- Fin detalle -->
+            <br />
+        </div>
+    </div>
+
+    <!-- Resumen de los valores en la compra -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Resumen de Compra</h5>
+                <p class="card-text">Subtotal: <span id="subtotal" class="buy-subtotal"></span></p>
+                <p class="card-text">IVA: <span id="iva" class="buy-iva"></span></p>
+                <p class="card-text">Total: <span id="total" class="buy-total"></span></p>
+                <button class="btn btn-primary" id="confirmarCompra">Confirmar Compra</button>
+            </div>
+        </div>
+    </div>
+    <!-- Fin resumen -->
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Boton incremento cantidad 
+            $('.btn-increment').click(function () {
+                var maxStock = parseInt($(this).closest('.input-group').data('stock')) +1;
+                var input = $(this).closest('.input-group').find('.quantity-input');
+                var newValue = parseInt(input.val()) + 1;
+                if (newValue <= maxStock) {
+                    input.val(newValue);
+                    actualizarTotales();
+                } else {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Cantidad supera Stock disponible",
+                        icon: "error"
+                    })
+                }
+            });
+
+            // Boton decremento cantidad
+            $('.btn-decrement').click(function () {
+                var input = $(this).closest('.input-group').find('.quantity-input');
+                var newValue = parseInt(input.val()) - 1;
+                if (newValue >= 0) {
+                    input.val(newValue);
+                    actualizarTotales();
+                }
+                if (parseInt(input.val()) <= 0) {
+                    var idCart = parseInt($(this).closest('.btn-decrement').data('cart'));
+                    var idBook = parseInt($(this).closest('.btn-decrement').data('book'));
+                    DelFromCart(idCart,idBook);
+
+                }
+            });
+
+            actualizarTotales();
+
+            $('#confirmarCompra').click(function () {
+                $('#modalPayment').modal('show');
+            });
+
+            document.getElementById("btnProcesarPago").addEventListener('click', function () {
+                var bookid;
+                var bookq;
+                var buyModel = [];
+                var buyDetailModel = [];
+
+                if (validarPaymentForm()) {
+
+                    buyModel = {
+                        IdUser: @Session["UserId"].ToString(),
+                        PhoneUser: '@Session["UserPhone"].ToString()',
+                        DirUser: '@Session["UserDir"].ToString()',
+                        ProductsQ: document.querySelector('.quantity-input').length
+                    }
+
+                    document.querySelectorAll('.row.cart-item').forEach(function (item) {
+                        bookid = item.querySelector('.book-id')
+                        bookq = item.querySelector('.book-q')
+                        bookprice = item.querySelector('.book-price')
+
+
+                        buyDetailModel.push({
+
+                            BuyProductId: bookid.value,
+                            BuyBookQ: bookq.value,
+                            BookPrice: bookprice.value,
+                            BuyBookQ: item.querySelector('.quantity-input').value
+                        })
+                    });
+
+                    sendToController(buyModel, buyDetailModel)
+                }
+            });
+
+        });
+
+        // Funcion para actualizar el total de venta
+        function actualizarTotales() {
+            var subtotal = 0;
+            var iva = 0;
+            var total = 0;
+            $('.row.cart-item').each(function () {
+                var cantidad = parseInt($(this).find('.quantity-input').val());
+                var valorUnitario = parseFloat($(this).find('.price').text().replace('$', '').replace('.', ''));
+                if (!isNaN(cantidad) && !isNaN(valorUnitario)) {
+                    subtotal += cantidad * valorUnitario;
+                    iva = subtotal * 0.19;
+                    total = subtotal + iva;
+
+                }
+            });
+            $('#subtotal').text("$" + subtotal.toLocaleString());
+            $('#iva').text("$" + iva.toLocaleString());
+            $('#total').text("$" + total.toLocaleString());
+            $('#totalPagar').text("$" + total.toLocaleString());
+
+        }
+
+        // Funcion para eliminar el libro del carrito
+        function DelFromCart(cartId, bookId) {
+            Swal.fire({
+                title: "¿Quieres eliminar el libro del carrito?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Ok",
+                cancelButtonText: `Cancelar`,
+                cancelButtonColor: "red"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Cart/DelFromCart',
+                        type: 'POST',
+                        data: { idCart: cartId, idBook: bookId },
+                        success: function (data) {
+                            if (data == "Ok") {
+                                $.ajax({
+                                    url: '/Cart/FindCart',
+                                    type: 'GET',
+                                    success: function (data) {
+                                        if (data == 0) {
+                                            location.href = '/Books/BooksList';
+                                        } else {
+                                            location.reload();
+                                            actualizarTotales();
+                                        }
+                                    }
+                                })
+                            } else {
+                                alert("No se pudo eliminar el libro")
+                            }
+                        },
+                        error: function () {
+                            alert("Error al eliminar del carrito");
+                        }
+                    })
+                }
+            });
+
+        }
+
+        // Crear espacio cada 4 digitos y asignar largo maximo en campo trj_numero
+        document.getElementById('trj_numero').addEventListener('input', function (e) {
+            let input = e.target;
+            let value = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let matches = value.match(/\d{4,16}/g);
+            let match = matches && matches[0] || '';
+            let parts = [];
+
+            for (let i = 0, len = match.length; i < len; i += 4) {
+                parts.push(match.substring(i, i + 4));
+            }
+
+            if (parts.length) {
+                input.value = parts.join(' ');
+            } else {
+                input.value = value;
+            }
+        });
+
+        // Crear '/' cada 2 digitos y asignar largo maximo en campo trj_vigencia
+        document.getElementById('trj_vigencia').addEventListener('input', function (e) {
+            let input = e.target;
+            let value = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let matches = value.match(/\d{1,4}/g);
+            let match = matches && matches[0] || '';
+            let parts = [];
+
+            for (let i = 0, len = match.length; i < len; i += 2) {
+                parts.push(match.substring(i, i + 2));
+            }
+
+            if (parts.length) {
+                input.value = parts.join('/');
+            } else {
+                input.value = value;
+            }
+        });
+
+        // Asignar largo maximo en campo trj_cvv
+        document.getElementById('trj_cvv').addEventListener('input', function (e) {
+            let input = e.target;
+            let value = input.value.replace(/[^0-9]/g, ''); // Eliminar cualquier carácter no numérico
+
+            // Limitar la longitud a 3 dígitos
+            if (value.length > 3) {
+                value = value.substring(0, 3);
+            }
+
+            input.value = value;
+        });
+
+        // Validar formulario crear
+        function validarPaymentForm() {
+
+            var isValid = true;
+
+            // Validacion campo trj_nombre
+                // Validar vacio
+                if (document.getElementById('trj_nombre').value == "") {
+                    mostrarMensajeError(trj_nombre, 'Ingrese Nombre de Titular. ');
+                    isValid = false;
+                } else {
+                    ocultarMensajeError(trj_nombre);
+                }
+
+            // Validacion campo trj_numero
+                // Validar vacio
+                if (document.getElementById('trj_numero').value == "") {
+                    mostrarMensajeError(trj_numero, 'Ingrese Numero de Tarjeta. ');
+                    isValid = false;
+                } else {
+                    ocultarMensajeError(trj_numero);
+
+                    // Validar radio MasterCard
+                    if (document.getElementById("master-card").checked) {
+                    // Valida el largo del campo
+                        if (trj_numero.value.length < 19) {
+                            mostrarMensajeError(trj_numero, 'Digitos de Tarjeta Correcto. ');
+                            isValid = false;
+                        } else {
+                            ocultarMensajeError(trj_numero);
+
+                            // Valida la expresion del campo
+                            // Formato MasterCard: 5(1-5)xx xxxx xxxx xxxx (16 dígitos)
+                            trjMC = /^5[1-5]\d{2}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}$/
+
+                            if (!trj_numero.value.match(trjMC)) {
+                                mostrarMensajeError(trj_numero, 'Numero de Tarjeta MasterCard incorrecto. ');
+                                isValid = false;
+                            } else {
+                                ocultarMensajeError(trj_numero);
+                            }
+                        }
+                    } // Validar radio visa
+                    else if (document.getElementById("visa-card").checked) {
+                        // Valida el largo del campo
+                        if (trj_numero.value.length < 19) {
+                            mostrarMensajeError(trj_numero, 'Digitos de Tarjeta Correcto. ');
+                            isValid = false;
+                        } else {
+                            ocultarMensajeError(trj_numero);
+
+                            // Valida la expresion del campo
+                            // Formato Visa: 4xxx xxxx xxxx xxxx (16 dígitos)
+                            trjVisa = /^4\d{3}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}$/
+
+                            if (!trj_numero.value.match(trjVisa)) {
+                                mostrarMensajeError(trj_numero, 'Numero de Tarjeta Visa incorrecto. ');
+                                isValid = false;
+                            } else {
+                                ocultarMensajeError(trj_numero);
+                            }
+                        }
+                    }
+                }
+
+            // Validacion campo trj_vigencia
+                // Validar vacio
+                if (document.getElementById('trj_vigencia').value == "") {
+                    mostrarMensajeError(trj_vigencia, 'Ingrese Caducidad de Tarjeta. ');
+                    isValid = false;
+                } else {
+                    ocultarMensajeError(trj_vigencia);
+
+                    // Valida el largo del campo
+                    if (trj_vigencia.value.length < 5) {
+                        mostrarMensajeError(trj_vigencia, 'Fecha incorrecta. ');
+                        isValid = false;
+
+                    } else {
+                        ocultarMensajeError(trj_vigencia);
+                    }
+                }
+
+            // Validacion campo trj_cvv
+                // Validar vacio
+                if (document.getElementById('trj_cvv').value == "") {
+                    mostrarMensajeError(trj_cvv, 'Ingrese CVV de Tarjeta. ');
+                    isValid = false;
+                } else {
+                    ocultarMensajeError(trj_cvv);
+
+                    // Valida el largo del campo
+                    if (trj_cvv.value.length < 3) {
+                        mostrarMensajeError(trj_cvv, 'Numero incorrecto. ');
+                        isValid = false;
+                    } else {
+                        ocultarMensajeError(trj_cvv);
+                    }
+                }
+
+            return isValid;
+
+        }
+
+        //Funcion para mostrar los mensajes de error
+        function mostrarMensajeError(elemento, mensaje) {
+            var mensajeError = elemento.nextElementSibling;
+            if (!mensajeError || !mensajeError.classList.contains('mensaje-error')) {
+                mensajeError = document.createElement('div');
+                mensajeError.classList.add('mensaje-error');
+                elemento.parentNode.insertBefore(mensajeError, elemento.nextSibling);
+            }
+            mensajeError.textContent = mensaje;
+        }
+
+        //Funcion para ocultar los mensajes de error
+        function ocultarMensajeError(elemento) {
+            var mensajeError = elemento.nextElementSibling;
+            if (mensajeError && mensajeError.classList.contains('mensaje-error')) {
+                mensajeError.parentNode.removeChild(mensajeError);
+            }
+        }
+
+        // Enviar la data al controller
+        function sendToController(buy, buyDetail) {
+            $.ajax({
+                url: '/BuySell/ProcessBuyPayment',
+                type: 'POST',
+                data: { buyModel: buy, buyDetailModel: buyDetail },
+                success: function (data) {
+                    if (data == "Ok") {
+                        Swal.fire({
+                            icon: "success",
+                            title: "¡Compra Exitosa!",
+                            text: "Pronto te avisaremos de tu compra",
+                            showConfirmButton: false,
+                            timer: 3000
+                        }).then(function() {
+                                location.href = '/Books/BooksList';
+                        });
+                    } else {
+                        location.reload();
+                        actualizarTotales();
+                    }
+                }
+            })
+        }
+
+    </script>
+}

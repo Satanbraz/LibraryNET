@@ -1,0 +1,991 @@
+﻿@model IEnumerable<DTO.Books>
+
+@{
+    ViewBag.Title = "Libros";
+}
+
+
+<style>
+    .card {
+        width: 300px; /* Ancho de la imagen del libro */
+        height: 500px; /* Altura de la imagen del libro */
+        position: relative;
+        overflow: hidden;
+    }
+
+        .card img {
+            width: 90%;
+            height: 80%;
+            position: absolute;
+            right: 15px;
+            cursor:pointer;
+        }
+
+    .card-details {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        text-align: left;
+        transition: all 0.3s ease;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+        .card-details .upload-btn {
+            position: absolute;
+            top: -405px; /* Distancia desde la parte superior del contenedor */
+            left: 17px; /* Distancia desde el lado derecho del contenedor */
+        }
+
+    .card-title {
+        overflow: hidden; /* Oculta el texto que se desborde del contenedor */
+        text-overflow: ellipsis; /* Agrega puntos suspensivos (...) para indicar que hay más texto */
+        white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    }
+
+    .card:hover .card-details,
+    .card:hover .stock-info {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .stock-info {
+        position: absolute;
+        top: 0;
+        left: 40%;
+        transform: translateX(-30%);
+        padding: 5px 10px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        border-radius: 5px;
+        z-index: 10;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .modal-vertical-centered .modal-dialog {
+        display: flex;
+        align-items: center;
+        min-height: calc(100% - 1rem); /* Altura mínima del modal */
+    }
+
+    /* Estilos para los mensajes de error */
+    .mensaje-error {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px; /* Espacio entre el campo y el mensaje de error */
+        margin-left: 5px;
+    }
+
+    .swal2-overflow {
+        overflow-x: visible;
+        overflow-y: visible;
+    }
+
+    .input-borrowReturnDate {
+        cursor: pointer;
+        margin-left: 17%;
+        margin-top: 5%;
+        margin-bottom: 5%;
+    }
+</style>
+
+<!-- Modal Agregar Libro-->
+<div id="modalAgregarLibro" class="modal fade modal-vertical-centered" tabindex="-1" aria-labelledby="modalAgregarLibroLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarLibroLabel">Agregar Libro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario de agregar libro -->
+                <form id="formAgregarLibro">
+                    <div class="mb-3">
+                        <label for="titleBook" class="form-label">Título</label>
+                        <input type="text" class="form-control" id="titleBook" name="titleBook" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="authorBook" class="form-label">Autor</label>
+                        <input type="text" class="form-control" id="authorBook" name="authorBook" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="control-label" for="editBook">Editorial</label>
+                        <select id="editBook" name="editBook" class="form-control">
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="anioBook" class="form-label">Año</label>
+                        <input type="number" class="form-control" id="anioBook" name="anioBook" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="control-label" for="genreBook">Género</label>
+                        <select id="genreBook" name="genreBook" class="form-control">
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="priceBook" class="form-label">Precio</label>
+                        <input type="number" class="form-control" id="priceBook" name="priceBook" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="bcBook" class="form-label">Código de Barra</label>
+                        <input type="text" class="form-control" id="bcBook" name="bcBook" required>
+                    </div>
+                    <!-- Agrega más campos según tus necesidades -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="validarForm()">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin modal agregar libro -->
+
+<!-- Modal Generar Prestamo-->
+<div id="modalGenerarSolicitarPrestamo" class="modal fade modal-vertical-centered" tabindex="-1" aria-labelledby="modalGenerarSolicitarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Convert.ToInt32(Session["UserRole"]) == 1)
+                {
+                    <h5 class="modal-title" id="modalGenerarPrestamoLabel">Generar Prestamo</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title" id="modalGenerarPrestamoLabel">Solicitar Prestamo</h5>
+                }
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario de generar/solicitar Prestamo -->
+                <form id="formGenerarPrestamo">
+                    <div class="mb-3">
+                        @if (Convert.ToInt32(Session["UserRole"]) == 1)
+                        {
+                            <label for="borrowDate" class="form-label">Ingrese fecha solicitada por usuario</label>
+                        }
+                        else
+                        {
+                            <label for="borrowDate" class="form-label">Ingrese fecha de préstamo</label>
+                        }
+                        <input type="datetime" class="form-control" id="borrowDate" name="borrowDate" required>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btn-ValidateBorrow">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin modal GenerarSolicitar Préstamo -->
+
+<div class="panel-group">
+    <!-- Seccion de filtro y busqueda -->
+    <div class="row">
+        <div class="col-md-2">
+            <div class="row">
+                <div class="col-md-4">
+                    <label onclick="MostrarBuscar('grupoBuscar')" style="cursor:pointer" id="labelBuscar">Buscar </label>
+                </div>
+                <div class="col-md-2">
+                    <label>|</label>
+                </div>
+                <div class="col-md-4">
+                    <label onclick="MostrarFiltrar('grupoFiltrar')" style="cursor:pointer" id="labelFiltrar">Filtrar</label>
+                </div>
+            </div>
+        </div>
+        @if (Convert.ToInt32(Session["UserRole"]) == 1)
+        {
+            <div class="col-md-10 text-end">
+                <button onclick="agregarLibros()" class="btn btn-primary">Agregar Libro</button>
+            </div>
+        }
+    </div>
+    <!-- Fin seccion -->
+
+    <hr style="width:12%" />
+
+    <!-- Columna para el formulario de filtro por género -->
+    <div class="row" id="grupoFiltrar" style="display:none">
+        <div class="col-md-12">
+            <div class="row">
+                <!-- Input vacio-->
+                <div class="col-md-2">
+
+                </div>
+
+                <!-- Input autor-->
+                <div class="col-md-3">
+                    <div class="row" style="text-align:end">
+                        <div class="col-md-3 align-self-center">
+                            <label class="label-padding-top">Autor</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select id="autorLibro" name="autorLibro" class="form-control">
+                                <!-- Opciones de autor -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Editorial-->
+                <div class="col-md-3">
+                    <div class="row" style="text-align:end">
+                        <div class="col-md-3 align-self-center">
+                            <label class="label-padding-top">Editorial</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select id="editorialLibro" name="editorialLibro" class="form-control">
+                                <!-- Opciones de editorial -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Genero-->
+                <div class="col-md-3">
+                    <div class="row" style="text-align:end">
+                        <div class="col-md-3 align-self-center">
+                            <label class="label-padding-top">Género</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select id="generoLibro" name="generoLibro" class="form-control">
+                                <!-- Opciones de género -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna para el botón de filtrar -->
+                <div class="col-md-1" style="text-align:end">
+                    <button type="submit" name="submitButton" onclick="filtrarBuscarLibros()" title="Filtrar" class="btn btn-primary">
+                        <svg width="21px" height="21px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="Stockholm-icons-/-Shopping-/-Sort1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect id="bound" x="0" y="0" width="24" height="24"></rect>
+                                <rect id="Rectangle-8" fill="#ffffff" x="4" y="5" width="16" height="3" rx="1.5"></rect>
+                                <path d="M7.5,11 L16.5,11 C17.3284271,11 18,11.6715729 18,12.5 C18,13.3284271 17.3284271,14 16.5,14 L7.5,14 C6.67157288,14 6,13.3284271 6,12.5 C6,11.6715729 6.67157288,11 7.5,11 Z M10.5,17 L13.5,17 C14.3284271,17 15,17.6715729 15,18.5 C15,19.3284271 14.3284271,20 13.5,20 L10.5,20 C9.67157288,20 9,19.3284271 9,18.5 C9,17.6715729 9.67157288,17 10.5,17 Z" id="Combined-Shape" fill="#ffffff" opacity="0.7"></path>
+                            </g>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <hr />
+    </div>
+    <!-- Fin columna filtro-->
+
+    <!-- Columna para el formulario de busqueda -->
+    <div class="row" id="grupoBuscar" style="display:none">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-8">
+
+                </div>
+                <div class="col-md-3">
+                    <div class="row" style="text-align:end">
+                        <div class="col-md-3 align-self-center">
+                            <label class="label-padding-top">Buscar</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="busquedaLibro">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna para el botón de buscar -->
+                <div class="col-md-1" style="text-align:end">
+                    <button type="submit" name="submitButton" onclick="filtrarBuscarLibros()" title="Buscar" class="btn btn-primary">
+                        <svg width="21px" height="21px" version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve">
+                            <style type="text/css">
+                                .st0 {
+                                    fill: none;
+                                    stroke: #ffffff;
+                                    stroke-width: 2;
+                                    stroke-linecap: round;
+                                    stroke-linejoin: round;
+                                    stroke-miterlimit: 10;
+                                }
+                            </style>
+                            <path class="st0" d="M26,3H9C7.3,3,6,4.3,6,6v0c0,1.7,1.3,3,3,3h17v10" />
+                            <path class="st0" d="M18,29H9c-1.7,0-3-1.3-3-3v0V6" />
+                            <line class="st0" x1="26" y1="6" x2="9" y2="6" />
+                            <line class="st0" x1="10" y1="9" x2="10" y2="29" />
+                            <path class="st0" d="M25.5,18.5c1.9,1.9,1.9,5.1,0,7c-0.5,0.5-1,0.8-1.6,1.1c-1.8,0.7-3.9,0.4-5.4-1.1c-1.9-1.9-1.9-5.1,0-7 S23.6,16.6,25.5,18.5z" />
+                            <path class="st0" d="M26.5,24l3.9,3.6c0.8,0.8,0.8,2,0,2.8l0,0c-0.8,0.8-2,0.8-2.8,0l-3.5-3.5" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <hr />
+    </div>
+    <!-- Fin columna busqueda -->
+
+    <!-- Card Libro -->
+    <div class="panel">
+        <div class="panel-body" style="text-align:center">
+            @if (Model.Count() <= 0)
+            {
+                <div class="swal2-icon swal2-info">
+                    <div class="swal2-icon-content">i</div>
+                </div>
+                <p>No existen Registros</p>
+            }
+            else
+            {
+                <div class="row">
+                    @foreach (var book in Model)
+                    {
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm" data-book-id="@book.Id">
+                            <!-- Cantidad de libros en stock -->
+                            <div class="stock-info">
+                                @if (book.Stock == 0)
+                                {
+                                    <p>Agotado</p>
+                                }
+                                else
+                                {
+                                    <p>Copias disponibles: @book.Stock</p>
+                                }
+
+                            </div>
+                            <!-- fin stock -->
+                            <!-- Cuerpo del card -->
+                            <div class="card-body">
+                                <!-- Informacion del libro -->
+                                <h5 class="card-title">@book.Title</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">@book.Author</h6>
+                                <div>
+                                    <img class="card-img" src="data:image/jpeg;base64,@Convert.ToBase64String(book.BookImage)" title="@book.Title" onclick="BookDetail(@book.Id)" />
+
+                                    <!-- Opción para cambiar o cargar la imagen -->
+                                    @if (Convert.ToInt32(Session["UserRole"]) == 1)
+                                    {
+                                        <div class="card-details">
+                                            <input type="file" class="file-input" style="display: none;" accept="image/*">
+                                            <button class="btn btn-sm btn-light upload-btn" data-book-id="@book.Id">
+                                                <i class="fas fa-pencil-alt"></i> Cargar/Cambiar imagen
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                                <!-- Fin informacion de libro-->
+                                <!-- Detalle del libro -->
+                                <div class="card-details">
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <p>
+                                                <strong>Editorial:</strong> @book.BookEdit <br />
+                                                <strong>Año:</strong> @book.BookYear <br />
+                                                <strong>Género:</strong> @book.BookGenre <br />
+                                                <strong>Estado:</strong> @book.BookState <br />
+                                                <strong>BC:</strong> @book.BookBC
+                                            </p>
+                                            <h3>$@book.BookPrice.ToString("N0")</h3>
+                                        </div>
+
+                                        <!-- Botones de accion -->
+                                        <div class="col-md-3">
+                                            @if (Convert.ToInt32(Session["UserRole"]) != 1)
+                                            {
+                                                <!-- boton solicitar préstamo -->
+                                                <a class="btn btn-sm btn-success btn-icon mr-2" title="Solicitar préstamo" onclick="ShowRequestBorrow(@Convert.ToInt32(Session["UserId"]), @book.Id)">
+                                                    <svg fill="#ffffff" height="24px" width="24px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                         viewBox="0 0 509.117 509.117" xml:space="preserve">
+                                                    <g transform="translate(1 1)">
+                                                        <g>
+                                                            <g>
+                                                                <path d="M500.965,256.162c-13.017-16.488-39.919-11.281-54.671-1.736l-75.498,50.332H255.378
+                                                                c-1.736-1.736-2.603-5.207-2.603-7.81c0-3.471,1.736-7.81,4.339-10.414l51.2-17.356c15.62-6.942,28.637-28.637,21.695-45.993
+                                                                c-2.603-6.075-7.81-11.281-14.753-13.885c-9.546-3.471-21.695-3.471-31.241,0.868l-77.234,26.034l-93.722,8.678
+                                                                c-6.942,0-18.224,6.942-22.563,9.546l-59.878,25.166c-26.902,12.149-39.051,43.39-26.902,70.292l39.919,97.193
+                                                                c0.868,2.603,2.603,4.339,5.207,5.207c1.736,0.868,2.603,0.868,3.471,0.868c1.736,0,2.603,0,3.471-0.868l102.4-51.2h154.468
+                                                                c0.868,0,1.736,0,2.603-1.736l104.136-34.712c0.868,0,1.736,0,2.603-0.868l69.424-52.068
+                                                                c8.678-6.075,14.753-17.356,16.488-28.637C508.775,272.65,507.039,263.104,500.965,256.162z M490.551,281.328
+                                                                c-0.868,6.942-4.339,13.885-9.546,17.356l-68.556,51.2l-101.532,33.844H156.449c-1.736,0-2.603,0-4.339,0l-95.458,47.729
+                                                                l-36.447-88.515c-7.81-18.224,0-39.051,18.224-47.729l60.746-26.034c0.868,0,0.868,0,1.736-0.868
+                                                                c3.471-2.603,10.414-6.942,13.017-6.942l95.458-8.678c0.868,0,0.868,0,1.736,0l78.969-26.034
+                                                                c3.471-0.868,6.942-1.736,10.414-1.736c2.603,0,5.207,0,7.81,0.868c2.603,0.868,4.339,2.603,5.207,4.339
+                                                                c2.603,6.942-4.339,19.959-12.149,23.431l-52.068,17.356c-0.868,0.868-1.736,0.868-2.603,1.736
+                                                            c-7.81,6.075-12.149,15.62-12.149,26.034c0.868,9.546,5.207,17.356,13.017,22.563c0.868,0.868,2.603,1.736,4.339,1.736h121.492
+                                                                c1.736,0,3.471-0.868,3.471-1.736l78.102-52.068c9.546-6.075,26.902-8.678,32.108-1.736
+                                                                C490.551,270.914,491.419,276.121,490.551,281.328z" />
+                                                                <path d="M60.992,175.457h52.068h34.712h225.627h34.712h52.068c5.207,0,8.678-3.471,8.678-8.678V62.643
+                                                                    c0-5.207-3.471-8.678-8.678-8.678H408.11h-34.712H147.772H113.06H60.992c-5.207,0-8.678,3.471-8.678,8.678v104.136
+                                                                    C52.314,171.985,55.785,175.457,60.992,175.457z M156.449,158.101v-86.78h208.271v86.78H156.449z M451.5,158.101h-34.712v-86.78                H451.5V158.101z M399.433,71.321v86.78h-17.356v-86.78H399.433z M139.094,71.321v86.78h-17.356v-86.78H139.094z M69.67,71.321                  h34.712v86.78H69.67V71.321z" />
+                                                                <path d="M321.331,106.033H199.839c-5.207,0-8.678,3.471-8.678,8.678s3.471,8.678,8.678,8.678h121.492
+                                                                     c5.207,0,8.678-3.471,8.678-8.678S326.538,106.033,321.331,106.033z" />
+                                                                            </g>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                </a>
+                                                <!-- fin boton solicitar préstamo -->
+                                                <br />
+                                                <br />
+                                                <!-- Boton Añadir a carrito-->
+                                                <a class="btn btn-sm btn-warning btn-icon mr-2" title="Añadir a carrito" onclick="addToCart(@Convert.ToInt32(Session["UserId"]), @book.Id)">
+                                                    <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                        <g id="Stockholm-icons-/-Shopping-/-Cart1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <rect id="bound" x="0" y="0" width="24" height="24"></rect>
+                                                            <path d="M18.1446364,11.84388 L17.4471627,16.0287218 C17.4463569,16.0335568 17.4455155,16.0383857 17.4446387,16.0432083 C17.345843,16.5865846 16.8252597,16.9469884 16.2818833,16.8481927 L4.91303792,14.7811299 C4.53842737,14.7130189 4.23500006,14.4380834 4.13039941,14.0719812 L2.30560137,7.68518803 C2.28007524,7.59584656 2.26712532,7.50338343 2.26712532,7.4104669 C2.26712532,6.85818215 2.71484057,6.4104669 3.26712532,6.4104669 L16.9929851,6.4104669 L17.606173,3.78251876 C17.7307772,3.24850086 18.2068633,2.87071314 18.7552257,2.87071314 L20.8200821,2.87071314 C21.4717328,2.87071314 22,3.39898039 22,4.05063106 C22,4.70228173 21.4717328,5.23054898 20.8200821,5.23054898 L19.6915238,5.23054898 L18.1446364,11.84388 Z" id="Combined-Shape" fill="#ffffff" opacity="1"></path>
+                                                            <path d="M6.5,21 C5.67157288,21 5,20.3284271 5,19.5 C5,18.6715729 5.67157288,18 6.5,18 C7.32842712,18 8,18.6715729 8,19.5 C8,20.3284271 7.32842712,21 6.5,21 Z M15.5,21 C14.6715729,21 14,20.3284271 14,19.5 C14,18.6715729 14.6715729,18 15.5,18 C16.3284271,18 17,18.6715729 17,19.5 C17,20.3284271 16.3284271,21 15.5,21 Z" id="Combined-Shape" fill="#ffffff"></path>
+                                                        </g>
+                                                    </svg>
+                                                </a>
+                                                <!-- Fin boton añadir a carrito-->
+                                            }
+                                        </div>
+                                        <!-- Fin botones de accion -->
+                                    </div>
+                                </div>
+                                <!-- Fin detalle de libro -->
+                            </div>
+                            <!-- Fin cuerpo del card -->
+                        </div>
+                    </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <!-- Fin card de libro -->
+</div>
+
+<!-- Botones de paginacion -->
+@if (ViewBag.TotalPages > 1)
+{
+    <div>
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <a class="btn btn-sm btn-outline-warning mr-2" href="@Url.Action("BooksList", new { page = ViewBag.CurrentPage - 1 })"><</a>
+        }
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <a class="btn btn-sm btn-warning mr-2" href="@Url.Action("BooksList", new { page = i })">@i</a>
+        }
+
+        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+        {
+            <a class="btn btn-sm btn-outline-warning mr-2" href="@Url.Action("BooksList", new { page = ViewBag.CurrentPage + 1 })">></a>
+        }
+    </div>
+}
+<!-- Fin botones de paginacion -->
+
+<script>
+    $(document).ready(function () {
+        $('#modalAgregarLibro').modal('hide');
+        $('#modalGenererPrestamo').modal('hide');
+
+        // Calendario para el campo borrowDate
+        flatpickr("#borrowDate",{
+            minDate: 'today', // Establecer fecha máxima permitida, día anterior al de hoy
+            dateFormat: 'd-m-Y', // Formato de fecha
+            locale: {
+                firstDayOfWeek: 1// Establecer el primer día de la semana en lunes (0 para domingo, 1 para lunes, etc.)
+            },
+            disable: [
+                function (date) {
+                    // Deshabilitar sabados y domingos
+                    return (date.getDay() === 0 || date.getDay() === 6);
+
+                }
+            ],
+            "locale":"es"
+        });
+
+        // Cargar los géneros al cargar la página para filtrar
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GenreListJson", "Genre")',
+            dataType: 'json',
+            success: function (data) {
+                $("#generoLibro").empty();
+
+                // Agregar el mensaje de selección por defecto al select Organizaciones
+                $("#generoLibro").append('<option value="0">-- Todos --</option>');
+                // Carga de datos a select
+                data.forEach(function (item) {
+                    var option = $("<option>").val(item.Id).text(item.GenreName);
+                    $("#generoLibro").append(option);
+                });;
+            }
+        });
+
+        // Cargar las editoriales al cargar la página para filtrar
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("EditListJson", "Edit")',
+            dataType: 'json',
+            success: function (data) {
+                $("#editBook").empty();
+
+                // Agregar el mensaje de selección por defecto al select Organizaciones
+                $("#editorialLibro").append('<option value="0">-- Todos --</option>');
+                // Carga de datos a select
+                data.forEach(function (item) {
+                    var option = $("<option>").val(item.Id).text(item.EditName);
+                    $("#editorialLibro").append(option);
+                });;
+            }
+        });
+
+        // Cargar los géneros al cargar la página para crear registro
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GenreListJson", "Genre")',
+            dataType: 'json',
+            success: function (data) {
+                $("#genreBook").empty();
+
+                // Agregar el mensaje de selección por defecto al select Organizaciones
+                $("#genreBook").append('<option value="0">-- Todos --</option>');
+                // Carga de datos a select
+                data.forEach(function (item) {
+                    var option = $("<option>").val(item.Id).text(item.GenreName);
+                    $("#genreBook").append(option);
+                });;
+            }
+        });
+
+        // Cargar las editoriales al cargar la página
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("EditListJson", "Edit")',
+            dataType: 'json',
+            success: function (data) {
+                $("#editBook").empty();
+
+                // Agregar el mensaje de selección por defecto al select Organizaciones
+                $("#editBook").append('<option value="0">-- Todos --</option>');
+                // Carga de datos a select
+                data.forEach(function (item) {
+                    var option = $("<option>").val(item.Id).text(item.EditName);
+                    $("#editBook").append(option);
+                });;
+            }
+        });
+    });
+
+    // Cargar las imagenes del libro en BD
+    document.addEventListener('DOMContentLoaded', function () {
+        var uploadButtons = document.querySelectorAll('.upload-btn');
+
+        // Asignar evento de clic a cada botón de carga de imagen
+        uploadButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var bookId = this.getAttribute('data-book-id'); // Obtener el ID del libro asociado con este botón
+                var fileInput = this.parentNode.querySelector('.file-input'); // Encontrar el input de archivo correspondiente
+                fileInput.dataset.bookId = bookId; // Almacenar el ID del libro en el input de archivo
+                fileInput.click(); // Simular clic en el input de archivo
+            });
+        });
+
+        // Asignar evento de cambio a cada input de archivo
+        var fileInputs = document.querySelectorAll('.file-input');
+        fileInputs.forEach(function (input) {
+            input.addEventListener('change', function () {
+                var bookId = this.dataset.bookId; // Obtener el ID del libro asociado con este input de archivo
+                var file = this.files[0]; // Obtener el archivo seleccionado
+
+                // Crear un FormData para enviar el ID del libro y el archivo al servidor
+                var formData = new FormData();
+                formData.append('bookId', bookId);
+                formData.append('image', file);
+
+                // Realizar una solicitud AJAX para cargar la imagen
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/Books/UploadImage', true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        // Manejar la respuesta del servidor si es necesario
+                        alert('Imagen cargada exitosamente');
+                        location.reload(); // Recargar la página
+                    } else {
+                        // Manejar errores
+                        console.error('Error al cargar la imagen:', xhr.statusText);
+                    }
+                };
+                xhr.onerror = function () {
+                    console.error('Error al cargar la imagen');
+                };
+                xhr.send(formData);
+            });
+        });
+    });
+
+    // Filtrar o Buscar Libros
+    function filtrarBuscarLibros() {
+        var selectedAutor = document.getElementById("autorLibro").value;
+        var selectedEdit = document.getElementById("editorialLibro").value;
+        var selectedGenre = document.getElementById("generoLibro").value;
+
+        var busqueda = document.getElementById("busquedaLibro").value;
+
+        window.location.href = "/Books/BooksList?BookEditId=" + selectedEdit + "&bookGenreId=" + selectedGenre + "&busqueda=" + busqueda;
+
+    }
+
+    // Mostrar la barra de busqueda
+    function MostrarBuscar(grupo) {
+        var grupoElement = document.getElementById(grupo);
+        var grupoFiltrar = document.getElementById('grupoFiltrar');
+
+        var isShow = grupoElement.style.display !== 'none';
+
+        grupoElement.style.display = isShow ? 'none' : 'block';
+
+        if (grupoFiltrar.style.display = 'block') {
+            grupoFiltrar.style.display = 'none'
+        }
+
+    }
+
+    // Mostrar la barra de filtros
+    function MostrarFiltrar(grupo) {
+        var grupoElement = document.getElementById(grupo);
+        var grupoBuscar = document.getElementById('grupoBuscar');
+
+        var isShow = grupoElement.style.display !== 'none';
+
+        grupoElement.style.display = isShow ? 'none' : 'block';
+
+        if (grupoBuscar.style.display = 'block') {
+            grupoBuscar.style.display = 'none'
+        }
+    }
+
+    // Mostrar el formulario de Crear
+    function agregarLibros() {
+        // Mostrar la ventana emergente para agregar libros
+        $('#modalAgregarLibro').modal('show');
+    }
+
+    // Validar formulario
+    function validarForm() {
+
+        var isValid = true;
+
+        //Validacion campo titleBook
+        if (document.getElementById('titleBook').value == "") {
+            mostrarMensajeError(titleBook, 'Ingrese Titulo. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(titleBook);
+        }
+        //Validacion campo authorBook
+        if (document.getElementById('authorBook').value == "") {
+            mostrarMensajeError(authorBook, 'Ingrese Autor. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(authorBook);
+        }
+        //Validacion campo anioBook
+        if (document.getElementById('anioBook').value <= 0) {
+            mostrarMensajeError(anioBook, 'Ingrese Año. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(anioBook);
+        }
+        //Validacion campo bcBook
+        if (document.getElementById('bcBook').value <= 0) {
+            mostrarMensajeError(bcBook, 'Ingrese Código de Barra. ');
+            isValid = false;
+        } else {
+            ocultarMensajeError(bcBook);
+        }
+        if (isValid) {
+            var bookModel = {
+                Title: titleBook.value,
+                Author: authorBook.value,
+                BookYear: anioBook.value,
+                BookGenreId: genreBook.value,
+                BookStateId: 1,
+                BookEditId: editBook.value,
+                BookBC: bcBook.value,
+                Stock: 1,
+            }
+
+            guardarLibro(bookModel);
+        }
+
+    }
+
+    // Enviar modelo al controller de crear
+    function guardarLibro(modelo) {
+        $.ajax({
+            url: '/Books/Create',
+            type: 'POST',
+            data: { books: modelo },
+            success: function (data) {
+                if (data == "Ok") {
+                    alert("Guardado con Exito");
+                    location.reload();
+                }
+            },
+            error: function () {
+                alert("Error al registrar Datos");
+            }
+        });
+    }
+
+    // Funcion para agregar libros al carrito de ventas
+    function addToCartSell() {
+        Swal.fire({
+            title: "Libro agregado al carrito",
+            text: "¿Deseas ver el carrito?",
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "No",
+            confirmButtonText: "Ir al carrito"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                location.href = '/Cart/CartDetail?userId'+ @Session["UserId"];
+            }
+        });
+    }
+
+    // Funcion para agregar libros al carrito de compras
+    function addToCart(userId,bookId) {
+        $.ajax({
+            url: '/Cart/AddToCart',
+            type: 'POST',
+            data: { IdUser: userId, IdProduct: bookId },
+            success: function (data) {
+                if (data == "Ok") {
+                    Swal.fire({
+                        title: "Libro agregado al carrito",
+                        text: "¿Deseas ver el carrito?",
+                        icon: "success",
+                        showCancelButton: true,
+                        cancelButtonColor: "#d33",
+                        cancelButtonText: "No",
+                        confirmButtonText: "Ir al carrito"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.href = '/Cart/CartDetail';
+                        } else if (result.isDenied) {
+                            location.reload();
+                        }
+                    });
+                } else {
+                    alert("Libro ya en carrito")
+                }
+            },
+            error: function () {
+                alert("Error al registrar Datos");
+            }
+        });
+
+
+    }
+
+    // Funcion para solicitar un prestamo
+    function ShowRequestBorrow(idUser, idBook) {
+        $.ajax({
+            url: '/Cart/VerifyExistenceInBorrowCart',
+            type: 'POST',
+            data: { idBook: idBook },
+            success: function (data) {
+                if (data == 1) {
+                    alert("Libro ya en bolsa")
+                } else {
+                    // Mostrar la ventana emergente para Generer Prestamo
+                    $('#modalGenerarSolicitarPrestamo').modal('show');
+
+                    document.getElementById("btn-ValidateBorrow").addEventListener('click', function () {
+                        if (document.getElementById('borrowDate').value == "") {
+                            mostrarMensajeError(borrowDate, 'Debe de ingresar la Fecha de Préstamo');
+                        }
+                        else {
+                            validateFormBorrowCartRequest(idUser, idBook);
+                        }
+                    })
+                }
+            },
+            error: function () {
+                alert("Error al registrar Datos");
+            }
+        });
+    }
+
+    // Funcion para validar los campos de fecha de retorno ingresadas
+    function validateFormBorrowCartRequest(idUser, idBook) {
+
+        $('#modalGenerarSolicitarPrestamo').modal('hide');
+        ocultarMensajeError(borrowDate);
+
+        var borrowCartModel = {
+            IdUser: idUser,
+            IdProduct: idBook,
+            ItemBorrowDate: document.getElementById('borrowDate').value
+        }
+
+        Swal.fire({
+            icon: 'question',
+            iconColor: 'red',
+            title: '¿Quieres ingresar Fecha de Devolución?',
+            text: 'Si no ingresas, la fecha se generará automaticamente  (7 días)',
+            showConfirmButton: true,
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            cancelButtonColor: 'red',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then((result) => {
+            var fechaPrestamoSplit = $('#borrowDate').val().split('-')
+            var fechaPrestamoDate = new Date(fechaPrestamoSplit[2], fechaPrestamoSplit[1] - 1, fechaPrestamoSplit[0]);
+            var maxReturnDate = addBusinessDays(fechaPrestamoDate, 6);
+
+            if (result.isConfirmed) {
+                var maxDate = addBusinessDays(fechaPrestamoDate, 20);
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Ingresa Fecha de Devolución',
+                    html: '<label>Si no ingresas, la fecha se generará automaticamente (7 días)</label>' +
+                        '<br />' +
+                        '<input type="datetime" class="form-control input-borrowReturnDate" id="borrowReturnDate" name="borrowReturnDate" required>',
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancelar',
+                    cancelButtonColor: 'red',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    preConfirm: () => {
+                        var borrowReturnDate = document.getElementById('borrowReturnDate').value;
+                        if (!borrowReturnDate) {
+                            Swal.showValidationMessage('Por favor, ingresa una fecha de devolución');
+                            return false;
+                        }
+                        return borrowReturnDate;
+                    },
+                    willOpen: (function () {
+                        flatpickr("#borrowReturnDate", {
+                            minDate: fechaPrestamoDate, // Establecer fecha minima permitida, día de solicitudde prestamo
+                            maxDate: maxDate, // Establecer fecha maxima permitida, 7 dias habiles contando el día de solicitudde prestamo
+                            dateFormat: 'd-m-Y', // Formato de fecha
+                            locale: {
+                                firstDayOfWeek: 1// Establecer el primer día de la semana en lunes (0 para domingo, 1 para lunes, etc.)
+                            },
+                            disable: [
+                                function (date) {
+                                    // Deshabilitar sabados y domingos
+                                    return (date.getDay() === 0 || date.getDay() === 6);
+                                }
+                            ],
+                            "locale": "es"
+                        });
+                    })
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#borrowDate').val("")
+                        var fechaDevolucion = $('#borrowReturnDate').val();
+
+                        borrowCartModel.ItemBorrowReturnDate =  fechaDevolucion
+
+                        addToBorrowCart(borrowCartModel)
+                    } else {
+
+                        $('#borrowDate').val("")
+                        borrowCartModel.ItemBorrowReturnDate = maxReturnDate.toLocaleDateString()
+
+                        addToBorrowCart(borrowCartModel)
+                    }
+                })
+            } else {
+                $('#borrowDate').val("")
+                borrowCartModel.ItemBorrowReturnDate = maxReturnDate.toLocaleDateString()
+
+                addToBorrowCart(borrowCartModel)
+            }
+        });
+    }
+
+    // Funcion para agregar libros al carrito de préstamos
+    function addToBorrowCart(model) {
+        $.ajax({
+            url: '/Cart/AddToBorrowCart',
+            type: 'POST',
+            data: { borrowCart : model },
+            success: function (data) {
+                if (data == "Ok") {
+                    Swal.fire({
+                        title: "Libro agregado al carrito de Préstamos",
+                        text: "¿Deseas ver el carrito?",
+                        icon: "success",
+                        showCancelButton: true,
+                        cancelButtonColor: "#d33",
+                        cancelButtonText: "No",
+                        confirmButtonText: "Ir al carrito"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.href = '/Cart/BorrowCartDetail';
+                        } else if (result.isDenied) {
+                            location.reload();
+                        }
+                    });
+                }
+            },
+            error: function () {
+                alert("Error al registrar Datos");
+            }
+        });
+    }
+
+    // Funcion para agregar dias habiles despues de la fecha de prestamo
+    function addBusinessDays(startDate, days) {
+        var currentDate = new Date(startDate);
+        var addedDays = 0;
+        while (addedDays < days) {
+            currentDate.setDate(currentDate.getDate() + 1);
+            // Omitir Fines de Semana
+            if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
+                addedDays++;
+            }
+        }
+        return currentDate;
+    }
+
+    //Funcion para mostrar los mensajes de error
+    function mostrarMensajeError(elemento, mensaje) {
+        var mensajeError = elemento.nextElementSibling;
+        if (!mensajeError || !mensajeError.classList.contains('mensaje-error')) {
+            mensajeError = document.createElement('div');
+            mensajeError.classList.add('mensaje-error');
+            elemento.parentNode.insertBefore(mensajeError, elemento.nextSibling);
+        }
+        mensajeError.textContent = mensaje;
+    }
+
+    //Funcion para ocultar los mensajes de error
+    function ocultarMensajeError(elemento) {
+        var mensajeError = elemento.nextElementSibling;
+        if (mensajeError && mensajeError.classList.contains('mensaje-error')) {
+            mensajeError.parentNode.removeChild(mensajeError);
+        }
+    }
+
+    function BookDetail(id) {
+        window.location.href = "/Books/BookDetail?bookId=" + id;
+    }
+</script>

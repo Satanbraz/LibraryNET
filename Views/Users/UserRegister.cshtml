@@ -1,0 +1,409 @@
+﻿
+@{
+    ViewBag.Title = "UserRegister";
+    Layout = null;
+}
+<br />
+<br />
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario Profesional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <!--Componentes Material Design-->
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <!---Librerias de Scripts-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!---Libreria Sweet Alert-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .container-form {
+            background-color: #fff;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            max-width: 650px;
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .container-form:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            }
+
+        .registration-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+            font-weight: 700;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #666;
+                font-weight: 500;
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 16px;
+                color: #333;
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            }
+
+        button {
+            padding: 12px;
+            border: none;
+            background-color: #6e8efb;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #576dec;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(110, 142, 251, 0.3);
+            }
+
+            button:active {
+                background-color: #4558db;
+                transform: translateY(0);
+                box-shadow: 0 2px 10px rgba(110, 142, 251, 0.3);
+            }
+
+            button:focus {
+                outline: none;
+            }
+
+        .password-field {
+            position: relative;
+        }
+
+            .password-field .toggle-password {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+            }
+
+        .mdc-text-field:not(.mdc-text-field--disabled) + .mdc-text-field-helper-line .mdc-text-field-helper-text {
+            color: rgb(255 0 0)
+        }
+    </style>
+</head>
+<body>
+    <div class="container-form">
+        <form id="register-form" class="registration-form">
+            <h2>Registro</h2>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="mdc-text-field mdc-text-field--outlined col-md-12">
+                            <input type="text" class="mdc-text-field__input" id="User" name="User" placeholder="Ingrese Nombre" required>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="UserName" class="mdc-floating-label">Nombre</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        <div class="mdc-text-field-helper-line">
+                            <div id="UserName-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                <!-- Mensaje de error aquí -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="mdc-text-field mdc-text-field--outlined col-md-12">
+                            <input type="text" class="mdc-text-field__input" id="UserLName" name="UserLName" placeholder="Ingrese Apellido" required>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="UserLName" class="mdc-floating-label">Apellido</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        <div class="mdc-text-field-helper-line">
+                            <div id="UserLName-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                <!-- Mensaje de error aquí -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="mdc-text-field mdc-text-field--outlined col-md-12">
+                            <input type="email" class="mdc-text-field__input" id="UserEmail" name="UserEmail" placeholder="Ingrese Correo" required>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="UserEmail" class="mdc-floating-label">Email</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        <div class="mdc-text-field-helper-line">
+                            <div id="UserEmail-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                <!-- Mensaje de error aquí -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="mdc-text-field mdc-text-field--outlined col-md-12">
+                            <input type="text" class="mdc-text-field__input" id="UserPhone" name="UserPhone" placeholder="Ingrese Teléfono" required maxlength="12">
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="UserPhone" class="mdc-floating-label">Teléfono</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        <div class="mdc-text-field-helper-line">
+                            <div id="UserPhone-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                <!-- Mensaje de error aquí -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <div class="mdc-text-field mdc-text-field--outlined col-md-12">
+                            <input type="text" class="mdc-text-field__input" id="UserDir" name="UserDir" placeholder="Ingrese Dirección" required>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="UserDir" class="mdc-floating-label">Dirección</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        <div class="mdc-text-field-helper-line">
+                            <div id="UserDir-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                <!-- Mensaje de error aquí -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="mdc-text-field mdc-text-field--outlined col-md-12">
+                            <input type="password" class="mdc-text-field__input" id="UserPass" name="UserPass" placeholder="Ingrese Contraseña" required>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="UserPass" class="mdc-floating-label">Contraseña</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        <div class="mdc-text-field-helper-line">
+                            <div id="UserPass-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                <!-- Mensaje de error aquí -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3" id="UserPassConfirmField">
+                        <div class="mdc-text-field mdc-text-field--outlined col-md-12">
+                            <input type="password" class="mdc-text-field__input" id="UserPassConfirm" name="UserPassConfirm" placeholder="Reingrese su contraseña" required>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="UserPassConfirm" class="mdc-floating-label">Confirmar Contraseña</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        <div class="mdc-text-field-helper-line">
+                            <div id="UserPassConfirm-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                <!-- Mensaje de error aquí -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="radio-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mdc-form-field">
+                                <div class="mdc-radio">
+                                    <input class="mdc-radio__native-control" type="radio" id="rd-cliente" name="userType" value="2">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
+                                    <div class="mdc-radio__ripple"></div>
+                                </div>
+                                <label for="genero-masculino">Cliente</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mdc-form-field">
+                                <div class="mdc-radio">
+                                    <input class="mdc-radio__native-control" type="radio" id="rd-estudiante" name="userType" value="3">
+                                    <div class="mdc-radio__background">
+                                        <div class="mdc-radio__outer-circle"></div>
+                                        <div class="mdc-radio__inner-circle"></div>
+                                    </div>
+                                    <div class="mdc-radio__ripple"></div>
+                                </div>
+                                <label for="genero-femenino">Estudiante</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+            </div>
+            <button type="submit" class="btn btn-primary" id="registerButton">Registrarse</button>
+
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const textFields = document.querySelectorAll('.mdc-text-field');
+            textFields.forEach((textField) => {
+                mdc.textField.MDCTextField.attachTo(textField);
+            });
+        });
+
+        document.getElementById('register-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Evita el envío del formulario por defecto
+
+            validarForm()
+        });
+
+        function validarForm() {
+
+            var isValid = true;
+
+            // Validacion campo repetir contraseña
+            if (document.getElementById('UserPassConfirm').value.length > 12) {
+                document.getElementById('UserPassConfirm-error').textContent = 'La contraseña no puede exceder los 12 caracteres';
+                document.getElementById('UserPassConfirm-error').setAttribute('aria-hidden', 'false');
+                isValid = false;
+            } else if (document.getElementById('UserPassConfirm').value != document.getElementById('UserPass').value) {
+                document.getElementById('UserPassConfirm-error').textContent = 'Contraseñas no coinciden';
+                document.getElementById('UserPassConfirm-error').setAttribute('aria-hidden', 'false');
+                isValid = false;
+            } else {
+                document.getElementById('UserPassConfirm-error').textContent = '';
+                document.getElementById('UserPassConfirm-error').setAttribute('aria-hidden', 'true');
+            }
+
+            if (isValid) {
+                var radios = document.querySelectorAll('input[name="userType"]');
+                var selectedValue;
+                radios.forEach(function (radio) {
+                    if (radio.checked) {
+                        selectedValue = radio.value;
+                    }
+                });
+
+                if (selectedValue) {
+                    // Recopila los datos del formulario
+                    const formData = {
+                        UserName: document.getElementById('User').value,
+                        userLastName: document.getElementById('UserLName').value,
+                        userEmail: document.getElementById('UserEmail').value,
+                        userPhone: document.getElementById('UserPhone').value,
+                        userDir: document.getElementById('UserDir').value,
+                        userPassword: document.getElementById('UserPass').value,
+                        UserRolId: selectedValue
+                    };
+                    registerUser(formData);
+
+                } else {
+                    alert("Por favor, seleccione un tipo de usuario.");
+                }
+            }
+        }
+
+        function registerUser(modelo) {
+            // Realiza la solicitud AJAX
+            $.ajax({
+                url: '/Users/UserRegister',
+                type: 'POST',
+                data: { user: modelo },
+                success: function (data) {
+                    if (data == "Ok") {
+                        Swal.fire({
+                            icon: "success",
+                            title: "¡Solicitud Exitosa!",
+                            text: "Registro Exitoso",
+                            timer: 3000,
+                            timerProgressBar: true
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                location.href = '/Account/Login';
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    // Manejar errores de la solicitud AJAX, si es necesario
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al intentar iniciar sesión.'
+                    });
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

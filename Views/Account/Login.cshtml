@@ -1,0 +1,290 @@
+﻿    @model DTO.LoginType
+@{
+    ViewBag.Title = "LibraryNET | Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <!--Componentes Material Design-->
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <!---Librerias de Scripts-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!---Libreria Sweet Alert-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        /* Estilos para el contenedor del formulario */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+            .login-container h2 {
+                font-size: 24px;
+                font-weight: 600;
+                margin-bottom: 30px;
+                text-align: center;
+            }
+
+        /* Estilos para los form control dentro del formulario */
+        .form-control {
+            height: 50px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+            .form-control:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            }
+
+        /* Estilos para el boton de login */
+        .btn-login {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            height: 50px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+            .btn-login:hover {
+                background-color: #0056b3;
+            }
+
+        /* Estilo para los labels de los campos */
+        .form-check-label {
+            font-weight: 400;
+        }
+
+        /* Estilo para el texto de forgot-password*/
+        .forgot-password {
+            text-align: right;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* Estilos para el link de registro */
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+            .signup-link a {
+                color: #007bff;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+                .signup-link a:hover {
+                    text-decoration: underline;
+                }
+
+        /* Estilos para los textos de error */
+        .mdc-text-field:not(.mdc-text-field--disabled) + .mdc-text-field-helper-line .mdc-text-field-helper-text {
+            color: rgb(255 0 0)
+        }
+
+        /* Estilo para el Sweet Alert */
+        .my-swal {
+            background: rgb(255, 255, 255, .0);
+            backdrop-filter: blur(0px);
+        }
+            /* Personaliza el spinner de carga */
+            .my-swal .swal2-loader {
+                border: 3px solid rgba(0, 0, 0, 0.1); /* Fondo del spinner */
+                border-top: 3px solid #007bff; /* Color del spinner */
+                width: 200px;
+                height: 200px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+
+                <div class="login-container">
+                    <h2>Iniciar Sesión</h2>
+                    <div class="form-group">
+                        <div class="col-md-12 mb-3" id="UserField">
+                            <div class="mdc-text-field mdc-text-field--outlined col-md-12">
+                                <input type="text" class="mdc-text-field__input" id="User" name="User" placeholder="Telefono o Email">
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="User" class="mdc-floating-label">Usuario</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            <div class="mdc-text-field-helper-line">
+                                <div id="User-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                    <!-- Mensaje de error aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12 mb-3" id="UserPassField">
+                            <div class="mdc-text-field mdc-text-field--outlined col-md-12">
+                                <input type="password" class="mdc-text-field__input" id="UserPass" name="UserPass" placeholder="Ingrese Contraseña">
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="UserPass" class="mdc-floating-label">Contraseña</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            <div class="mdc-text-field-helper-line">
+                                <div id="UserPass-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                    <!-- Mensaje de error aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-login btn-block" id="btn-login">Iniciar Sesión</button>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Recordarme</label>
+                    </div>
+
+                    <div class="forgot-password">
+                        <a href="@Url.Action("ForgotPassword", "Account")">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <div class="signup-link">
+                        ¿Nuevo usuario? <a href="@Url.Action("UserRegister", "Users")">Regístrate aquí</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <!-- Libreria AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const textFields = document.querySelectorAll('.mdc-text-field');
+            textFields.forEach((textField) => {
+                mdc.textField.MDCTextField.attachTo(textField);
+            });
+        });
+
+        document.getElementById('btn-login').addEventListener('click', function () {
+            validarForm();
+        })
+
+        // Funcion para validar los campos antes de enviarlos
+        function validarForm() {
+            var isValid = true;
+
+            // Validacion campo nombre
+            if (document.getElementById('User').value.trim() == '') {
+                document.getElementById('User-error').textContent = 'El nombre de usuario es obligatorio';
+                document.getElementById('User-error').setAttribute('aria-hidden', 'false');
+                isValid = false;
+            } else {
+                document.getElementById('User-error').textContent = '';
+                document.getElementById('User-error').setAttribute('aria-hidden', 'true');
+            }
+            // Validacion campo contraseña
+            if (document.getElementById('UserPass').value.trim() == '') {
+                document.getElementById('UserPass-error').textContent = 'La contraseña de usuario es obligatorio';
+                document.getElementById('UserPass-error').setAttribute('aria-hidden', 'false');
+                isValid = false;
+            } else if (document.getElementById('UserPass').value.length > 12) {
+                document.getElementById('UserPass-error').textContent = 'La contraseña no puede exceder los 12 caracteres';
+                document.getElementById('UserPass-error').setAttribute('aria-hidden', 'false');
+                isValid = false;
+            } else {
+                document.getElementById('UserPass-error').textContent = '';
+                document.getElementById('UserPass-error').setAttribute('aria-hidden', 'true');
+            }
+
+            if (isValid) {
+                Swal.fire({
+                    customClass: {
+                        popup: 'my-swal'
+                    },
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    timer: 2000,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                }).then(() => {
+                    
+                        // Redireccionar a la URL indicada en la respuesta
+                        loginUser(document.getElementById('User').value, document.getElementById('UserPass').value)
+                    
+                });
+            }
+        }
+
+
+        function loginUser(user, pass) {
+            $.ajax({
+                url: '/Account/Login',
+                type: 'POST',
+                data: { User: user, Password: pass },
+                success: function (response) {
+                    if (response.redirectUrl) {
+                        // Redireccionar a la URL indicada en la respuesta
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        // Mostrar mensaje de error utilizando Swal (SweetAlert)
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.error
+                        });
+                    }
+                },
+                error: function () {
+                    // Manejar errores de la solicitud AJAX, si es necesario
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al intentar iniciar sesión.'
+                    });
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
+

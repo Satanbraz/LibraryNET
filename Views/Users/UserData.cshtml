@@ -1,0 +1,441 @@
+﻿@model DTO.Users
+
+@{
+    ViewBag.title = "Mis Datos";
+}
+
+<style>
+    /* Estilos para los mensajes de error */
+    .mdc-text-field:not(.mdc-text-field--disabled) + .mdc-text-field-helper-line .mdc-text-field-helper-text {
+        color:rgb(255 0 0)
+    }
+</style>
+
+<div class="panel">
+    <div class="card shadow-lg">
+        <!-- Header del contenedor -->
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Mis Datos</h2>
+        </div>
+        <!-- Fin header -->
+
+        <!-- Contenido del contenedor -->
+        <div class="card-body">
+            <form id="userForm" class="needs-validation">
+
+                <!-- Hidden inputs -->
+                <input type="hidden" id="idUser" value="@Model.Id"/>
+                <input type="hidden" id="idRol" value="@Model.UserRolId"/>
+                <!-- Fin hidden inputs -->
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="mdc-text-field mdc-text-field--outlined col-md-8">
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "mdc-text-field__input col-md-12", @id = "UserName", @name = "UserName", @readonly = "readonly", @error = "error" })
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="UserName" class="mdc-floating-label">Nombre</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            <div class="mdc-text-field-helper-line">
+                                <div id="UserName-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                    <!-- Mensaje de error aquí -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="mdc-text-field mdc-text-field--outlined col-md-8">
+                                @Html.TextBoxFor(m => m.UserLastName, new { @class = "mdc-text-field__input", @id = "UserLastName", @name = "UserLastName", @readonly = "readonly" })
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="UserLName" class="mdc-floating-label">Apellido</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            <div class="mdc-text-field-helper-line">
+                                <div id="UserLName-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                    <!-- Mensaje de error aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="mdc-text-field mdc-text-field--outlined col-md-8">
+                                @Html.TextBoxFor(m => m.UserEmail, new { @class = "mdc-text-field__input", @id = "UserEmail", @name = "UserEmail", @readonly = "readonly", @placeholder = "alguien@ejemplo.com" })
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="UserEmail" class="mdc-floating-label">Email</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            <div class="mdc-text-field-helper-line">
+                                <div id="UserEmail-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                    <!-- Mensaje de error aquí -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="mdc-text-field mdc-text-field--outlined col-md-8">
+                                @Html.TextBoxFor(m => m.UserPhone, new { @class = "mdc-text-field__input", @id = "UserPhone", @name = "UserPhone", @readonly = "readonly" })
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="UserPhone" class="mdc-floating-label">Teléfono</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            <div class="mdc-text-field-helper-line">
+                                <div id="UserPhone-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                    <!-- Mensaje de error aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="mdc-text-field mdc-text-field--outlined col-md-8">
+                                @Html.TextBoxFor(m => m.UserDir, new { @class = "mdc-text-field__input", @id = "UserDir", @name = "UserDir", @readonly = "readonly" })
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="UserDir" class="mdc-floating-label">Dirección</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            <div class="mdc-text-field-helper-line">
+                                <div id="UserDir-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                    <!-- Mensaje de error aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="mdc-text-field mdc-text-field--outlined col-md-8">
+                                <input type="password" class="mdc-text-field__input" id="UserPass" name="UserPass" value="@System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(Model.UserPassword))" readonly>
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="UserPass" class="mdc-floating-label">Contraseña</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            <div class="mdc-text-field-helper-line">
+                                <div id="UserPass-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                    <!-- Mensaje de error aquí -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3" id="UserPassConfirmField" style="display: none;">
+                            <div class="mdc-text-field mdc-text-field--outlined col-md-8">
+                                <input type="password" class="mdc-text-field__input" id="UserPassConfirm" name="UserPassConfirm" placeholder="Reingrese su contraseña">
+                                <div class="mdc-notched-outline">
+                                    <div class="mdc-notched-outline__leading"></div>
+                                    <div class="mdc-notched-outline__notch">
+                                        <label for="UserPassConfirm" class="mdc-floating-label">Confirmar Contraseña</label>
+                                    </div>
+                                    <div class="mdc-notched-outline__trailing"></div>
+                                </div>
+                            </div>
+                            <div class="mdc-text-field-helper-line">
+                                <div id="UserPassConfirm-error" class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg" aria-hidden="true">
+                                    <!-- Mensaje de error aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Label registro -->
+                <div class="col-md-6 mb-3">
+                    <label for="UserDate">Fecha de Registro: @Model.UserDate.ToString("dd-MM-yyyy")</label>
+                </div>
+                <!-- Fin label -->
+
+                <!-- Botones de accion -->
+                <button type="button" class="btn btn-primary" id="editButton">Actualizar Datos</button>
+                <button type="button" class="btn btn-success" id="saveButton" style="display: none;">Guardar</button>
+                <button type="button" class="btn btn-danger" id="cancelButton" style="display: none;">Cancelar</button>
+                <!-- fin botones de accion -->
+
+            </form>
+        </div>
+        <!-- Fin contenido -->
+
+        <!-- Footer del contenedor -->
+        <div class="card-footer text-right">
+            <label id="deleteAccount" class="text-danger" style="cursor:pointer;">Eliminar Cuenta</label>
+        </div>
+        <!-- Fin footer -->
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const textFields = document.querySelectorAll('.mdc-text-field');
+        textFields.forEach((textField) => {
+            mdc.textField.MDCTextField.attachTo(textField);
+        });
+    });
+
+    // Metodo del boton editar para habilitar los campos de edicion
+    document.getElementById('editButton').addEventListener('click', function() {
+        Swal.fire({
+            title: 'Ingrese su contraseña',
+            input: 'password',
+            inputLabel: 'Contraseña',
+            inputPlaceholder: 'Ingrese su contraseña',
+            inputAttributes: {
+                autocapitalize: 'off',
+                autocorrect: 'off',
+                'style': 'margin-left: 23%;',
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirmar',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                if (password === '@System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(Model.UserPassword))') {
+                    return true;
+                } else {
+                    Swal.showValidationMessage('Contraseña incorrecta');
+                    return false;
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const inputs = document.querySelectorAll('#userForm input');
+                inputs.forEach(input => input.removeAttribute('readonly'));
+
+                // Mostrar campo de confirmación de contraseña y botón de guardar
+                document.getElementById('UserPassConfirmField').style.display = 'block';
+                document.getElementById('saveButton').style.display = 'inline-block';
+                document.getElementById('cancelButton').style.display = 'inline-block';
+                document.getElementById('editButton').style.display = 'none';
+
+                Swal.fire({
+                   title: 'Autenticado',
+                   text: 'Ahora puede actualizar sus datos',
+                    icon: 'success',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    timer: 2000
+                });
+            }
+        })
+    });
+
+    // Funcion para validar los campos antes de enviarlos
+    function validarFormEdit() {
+        var isValid = true;
+
+
+        // Validacion campo nombre
+        if (document.getElementById('UserName').value.trim() == '') {
+            document.getElementById('UserName-error').textContent = 'El nombre de usuario es obligatorio';
+            document.getElementById('UserName-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else if (document.getElementById('UserName').value.length > 15) {
+            document.getElementById('UserName-error').textContent = 'El nombre no puede exceder los 15 caracteres';
+            document.getElementById('UserName-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else {
+            document.getElementById('UserName-error').textContent = '';
+            document.getElementById('UserName-error').setAttribute('aria-hidden', 'true');
+        }
+       // Validacion campo apellido
+        if (document.getElementById('UserLastName').value.trim() == '') {
+            document.getElementById('UserLName-error').textContent = 'El apellido de usuario es obligatorio';
+            document.getElementById('UserLName-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else if (document.getElementById('UserLastName').value.length > 15) {
+            document.getElementById('UserLName-error').textContent = 'El apellido no puede exceder los 15 caracteres';
+            document.getElementById('UserLName-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else {
+            document.getElementById('UserName-error').textContent = '';
+            document.getElementById('UserName-error').setAttribute('aria-hidden', 'true');
+        }
+        // Validacion campo correo
+        if (document.getElementById('UserEmail').value.trim() == '') {
+            document.getElementById('UserEmail-error').textContent = 'El correo de usuario es obligatorio';
+            document.getElementById('UserEmail-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else {
+            document.getElementById('UserEmail-error').textContent = '';
+            document.getElementById('UserEmail-error').setAttribute('aria-hidden', 'true');
+        }
+        // Validacion campo telefono
+        if (document.getElementById('UserPhone').value.trim() == '') {
+            document.getElementById('UserPhone-error').textContent = 'El teléfono de usuario es obligatorio';
+            document.getElementById('UserPhone-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else if (document.getElementById('UserPhone').value.length > 12) {
+            document.getElementById('UserPhone-error').textContent = 'El teléfono no puede exceder los 12 caracteres';
+            document.getElementById('UserPhone-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else {
+            document.getElementById('UserPhone-error').textContent = '';
+            document.getElementById('UserPhone-error').setAttribute('aria-hidden', 'true');
+        }
+        // Validacion campo direccion
+        if (document.getElementById('UserDir').value.trim() == '') {
+            document.getElementById('UserDir-error').textContent = 'La dirección de usuario es obligatorio';
+            document.getElementById('UserDir-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else if (document.getElementById('UserDir').value.length > 100) {
+            document.getElementById('UserDir-error').textContent = 'La dirección no puede exceder los 100 caracteres';
+            document.getElementById('UserDir-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else {
+            document.getElementById('UserDir-error').textContent = '';
+            document.getElementById('UserDir-error').setAttribute('aria-hidden', 'true');
+        }
+        // Validacion campo contraseña
+        if (document.getElementById('UserPass').value.trim() == '') {
+            document.getElementById('UserPass-error').textContent = 'La contraseña de usuario es obligatorio';
+            document.getElementById('UserPass-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else if (document.getElementById('UserPass').value.length > 12) {
+            document.getElementById('UserPass-error').textContent = 'La contraseña no puede exceder los 12 caracteres';
+            document.getElementById('UserPass-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else {
+            document.getElementById('UserPass-error').textContent = '';
+            document.getElementById('UserPass-error').setAttribute('aria-hidden', 'true');
+        }
+        // Validacion campo repetir contraseña
+        if (document.getElementById('UserPassConfirm').value.trim() == '') {
+            document.getElementById('UserPassConfirm-error').textContent = 'Debe verificar contraseña';
+            document.getElementById('UserPassConfirm-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else if (document.getElementById('UserPassConfirm').value.length > 12) {
+            document.getElementById('UserPassConfirm-error').textContent = 'La contraseña no puede exceder los 12 caracteres';
+            document.getElementById('UserPassConfirm-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else if (document.getElementById('UserPassConfirm').value != document.getElementById('UserPass').value) {
+            document.getElementById('UserPassConfirm-error').textContent = 'Contraseñas no coinciden';
+            document.getElementById('UserPassConfirm-error').setAttribute('aria-hidden', 'false');
+            isValid = false;
+        } else {
+            document.getElementById('UserPassConfirm-error').textContent = '';
+            document.getElementById('UserPassConfirm-error').setAttribute('aria-hidden', 'true');
+        }
+
+        if (isValid) {
+            setTimeout(function () {
+
+                var userModel = {
+                    Id: document.getElementById('idUser').value,
+                    UserName: document.getElementById('UserName').value,
+                    UserLastName: document.getElementById('UserLastName').value,
+                    UserEmail: document.getElementById('UserEmail').value,
+                    UserPassword: document.getElementById('UserPass').value,
+                    UserPhone: document.getElementById('UserPhone').value,
+                    UserDir: document.getElementById('UserDir').value,
+                    UserRolId: document.getElementById('idRol').value
+                }
+
+                updateUser(userModel)
+
+            }, 2000); // Simulamos 2 segundos de tiempo de carga
+        }
+    }
+
+    // Cancelar la edición
+    document.getElementById('cancelButton').addEventListener('click', function () {
+        location.reload()
+    });
+
+    // Borrar cuenta
+    document.getElementById('deleteAccount').addEventListener('click', function() {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esto",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarla'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: '/Users/Delete',
+                    type: 'POST',
+                    data: { userId: document.getElementById('idUser').value },
+                    success: function (data) {
+                        if (data == "Ok") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Cuenta eliminada',
+                                timer: 2000,
+                                timerProgressBar: true
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    location.href = '/Account/login';
+                                }
+                            });
+                        } else {
+                            alert("Registro existente\nNo hay nada que Eliminar");
+                        }
+                    },
+                    error: function () {
+                        alert("Error al eliminar Registro");
+                    }
+                });
+            }
+        })
+    });
+
+    // Validar Campos
+    document.getElementById('saveButton').addEventListener('click', function () {
+        validarFormEdit()
+    });
+
+    // Enviar modelo al controller de editar
+    function updateUser(modelo) {
+        $.ajax({
+            url: '/Users/Edit',
+            type: 'POST',
+            data: { user: modelo },
+            success: function (data) {
+                if (data == "Ok") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Cambios guardados con exito',
+                        timer: 2000,
+                        timerProgressBar: true
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            location.reload();
+                        }
+                    });
+                } else {
+                    alert("Registro existente\nNo hay nada que actualizar");
+                }
+            },
+            error: function () {
+                alert("Error al actualizar Datos");
+            }
+        });
+    }
+</script>

@@ -1,0 +1,10 @@
+E:\ProjectsVS\LibraryNET\DTO\bin\Debug\DTO.dll.config
+E:\ProjectsVS\LibraryNET\DTO\bin\Debug\DTO.dll
+E:\ProjectsVS\LibraryNET\DTO\bin\Debug\DTO.pdb
+E:\ProjectsVS\LibraryNET\DTO\bin\Debug\System.Data.SqlClient.dll
+E:\ProjectsVS\LibraryNET\DTO\bin\Debug\System.Data.SqlClient.xml
+E:\ProjectsVS\LibraryNET\DTO\obj\Debug\DTO.csproj.AssemblyReference.cache
+E:\ProjectsVS\LibraryNET\DTO\obj\Debug\DTO.csproj.CoreCompileInputs.cache
+E:\ProjectsVS\LibraryNET\DTO\obj\Debug\DTO.csproj.Up2Date
+E:\ProjectsVS\LibraryNET\DTO\obj\Debug\DTO.dll
+E:\ProjectsVS\LibraryNET\DTO\obj\Debug\DTO.pdb

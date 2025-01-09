@@ -1,0 +1,109 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\ProjectsVS\\LibraryNET\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{330CE2E3-15CD-4F28-8482-D0B0728D973C}|LibraryNET.csproj|E:\\ProjectsVS\\LibraryNET\\views\\books\\bookslist.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{330CE2E3-15CD-4F28-8482-D0B0728D973C}|LibraryNET.csproj|solutionrelative:views\\books\\bookslist.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{330CE2E3-15CD-4F28-8482-D0B0728D973C}|LibraryNET.csproj|E:\\ProjectsVS\\LibraryNET\\controllers\\bookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{330CE2E3-15CD-4F28-8482-D0B0728D973C}|LibraryNET.csproj|solutionrelative:controllers\\bookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9B2B967F-99AE-4FB8-8B8F-9FA4B44A81B9}|LibraryNET.Implementation\\LibraryNET.Implementation.csproj|e:\\projectsvs\\librarynet\\librarynet.implementation\\adminmanagers\\booksmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9B2B967F-99AE-4FB8-8B8F-9FA4B44A81B9}|LibraryNET.Implementation\\LibraryNET.Implementation.csproj|solutionrelative:librarynet.implementation\\adminmanagers\\booksmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{330CE2E3-15CD-4F28-8482-D0B0728D973C}|LibraryNET.csproj|E:\\ProjectsVS\\LibraryNET\\controllers\\editcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{330CE2E3-15CD-4F28-8482-D0B0728D973C}|LibraryNET.csproj|solutionrelative:controllers\\editcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{330CE2E3-15CD-4F28-8482-D0B0728D973C}|LibraryNET.csproj|e:\\projectsvs\\librarynet\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{330CE2E3-15CD-4F28-8482-D0B0728D973C}|LibraryNET.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "E:\\ProjectsVS\\LibraryNET\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
+              "ToolTip": "E:\\ProjectsVS\\LibraryNET\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Controllers\\AccountController.cs",
+              "ViewState": "AQIAABIAAAAAAAAAAAAAwDgAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-09T17:57:32.528Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BooksManager.cs",
+              "DocumentMoniker": "E:\\ProjectsVS\\LibraryNET\\LibraryNET.Implementation\\AdminManagers\\BooksManager.cs",
+              "RelativeDocumentMoniker": "LibraryNET.Implementation\\AdminManagers\\BooksManager.cs",
+              "ToolTip": "E:\\ProjectsVS\\LibraryNET\\LibraryNET.Implementation\\AdminManagers\\BooksManager.cs",
+              "RelativeToolTip": "LibraryNET.Implementation\\AdminManagers\\BooksManager.cs",
+              "ViewState": "AQIAAB8AAAAAAAAAAAAmwOIAAABzAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-08T20:25:18.19Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "EditController.cs",
+              "DocumentMoniker": "E:\\ProjectsVS\\LibraryNET\\Controllers\\EditController.cs",
+              "RelativeDocumentMoniker": "Controllers\\EditController.cs",
+              "ToolTip": "E:\\ProjectsVS\\LibraryNET\\Controllers\\EditController.cs",
+              "RelativeToolTip": "Controllers\\EditController.cs",
+              "ViewState": "AQIAABwAAAAAAAAAAAAgwIwAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-08T20:31:41.724Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BooksList.cshtml",
+              "DocumentMoniker": "E:\\ProjectsVS\\LibraryNET\\Views\\Books\\BooksList.cshtml",
+              "RelativeDocumentMoniker": "Views\\Books\\BooksList.cshtml",
+              "ToolTip": "E:\\ProjectsVS\\LibraryNET\\Views\\Books\\BooksList.cshtml",
+              "RelativeToolTip": "Views\\Books\\BooksList.cshtml",
+              "ViewState": "AQIAAIABAAAAAAAAAAAowIsBAABfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-06T19:31:13.141Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BooksController.cs",
+              "DocumentMoniker": "E:\\ProjectsVS\\LibraryNET\\Controllers\\BooksController.cs",
+              "RelativeDocumentMoniker": "Controllers\\BooksController.cs",
+              "ToolTip": "E:\\ProjectsVS\\LibraryNET\\Controllers\\BooksController.cs",
+              "RelativeToolTip": "Controllers\\BooksController.cs",
+              "ViewState": "AQIAAGIAAAAAAAAAAAAswJwAAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-08T20:22:41.226Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

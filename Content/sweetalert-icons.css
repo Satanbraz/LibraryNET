@@ -1,0 +1,82 @@
+﻿/* Estilos base para todos los íconos */
+.swal2-icon {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    line-height: 80px;
+    text-align: center;
+    margin: 20px auto;
+    border: 4px solid transparent;
+    box-sizing: content-box;
+    display:flex;
+}
+
+/* Animación base */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Estilo para el ícono de éxito */
+.swal2-success {
+    border-color: #a5dc86;
+    background: #f6f9f8;
+    color: #a5dc86;
+}
+
+    .swal2-success .swal2-icon-content {
+        font-size: 48px;
+        color: #a5dc86;
+        animation: pulse 1.5s infinite;
+    }
+
+/* Estilo para el ícono de error */
+.swal2-error {
+    border-color: #f27474;
+    background: #fceaea;
+    color: #f27474;
+}
+
+    .swal2-error .swal2-icon-content {
+        font-size: 48px;
+        color: #f27474;
+        animation: pulse 1.5s infinite;
+    }
+
+/* Estilo para el ícono de advertencia */
+.swal2-warning {
+    border-color: #facea8;
+    background: #fdf6ec;
+    color: #facea8;
+}
+
+    .swal2-warning .swal2-icon-content {
+        font-size: 48px;
+        color: #facea8;
+        animation: pulse 1.5s infinite;
+    }
+
+/* Estilo para el ícono de info */
+.swal2-info {
+    border-color: #3fc3ee;
+    background: #e9f6fb;
+    color: #3fc3ee;
+}
+
+    .swal2-info .swal2-icon-content {
+        font-size: 48px;
+        color: #3fc3ee;
+        animation: pulse 1.5s infinite;
+    }

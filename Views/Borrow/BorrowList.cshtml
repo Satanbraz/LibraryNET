@@ -1,0 +1,209 @@
+﻿@model IEnumerable<DTO.Borrows>
+
+@{
+    ViewBag.Title = "Prestamos";
+}
+
+<style>
+    /* Estilo del contenedor de transaccion */
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+        transition: max-height 0.3s ease-out;
+        overflow: hidden;
+    }
+
+    /* Estilo del coontenido de la transaccion */
+    .card-content {
+        display: none;
+        margin-top: 10px;
+    }
+
+    /* Estilo de la imagen en cada item de transaccion */
+    .card img {
+        width: 50%;
+    }
+
+    /* Estilo del label de fechas */
+    .label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    /* Estilo para la caja de mensajes de aviso de prestamo */
+    .alert {
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+
+    /* Estilo del mensaje de aviso de dias faltantes */
+    .alert-warning {
+        color: #856404;
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+    }
+
+    /* Estilo del mensaje de aviso de retraso */
+    .alert-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+</style>
+
+<h2>Mis Préstamos</h2>
+<hr />
+
+<div class="panel">
+    @if (Model.Where(m => m.borrowDetail.isActive).Count() > 0)
+    {
+        foreach (var borrow in Model.Where(a => a.borrowDetail.isActive == true).OrderByDescending(b => b.Id).GroupBy(b => b.IdTransaction))
+        {
+            <div class="card">
+                <!-- Header de transacciones -->
+                <div class="btn btn-outline-primary" style="text-align:right" onclick="detailCard(this)">
+                    <div class="row">
+                        <div class="col-md-6" style="text-align:start">
+                            Fecha de Registro: @borrow.First().BorrowRegisterDate.ToShortDateString()
+                        </div>
+                        <div class="col-md-6" style="text-align:end">
+                            ID de Solicitud: @borrow.Key
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin header de transacciones -->
+                <!-- Card de informacion de prestamos -->
+                <div class="card card-content">
+                    @foreach (var item in borrow)
+                    {
+                        <!-- Fila de cada libro por transaccion -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div>
+                                    <img class="card-img" src="data:image/jpeg;base64,@Convert.ToBase64String(item.books.BookImage)">
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        Detalles del Libro
+                                    </div>
+                                    <div class="col-md-7 text-end">
+                                        <div id="alert-@item.borrowDetail.Id"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5" style="padding:1%">
+                                        <div class="row">
+                                            <h5>@item.books.Title</h5>
+                                        </div>
+                                        <div class="row">
+                                            <h7>@item.books.Author</h7>
+                                        </div>
+                                        <hr />
+                                    </div>
+                                    <div class="col-md-7 text-end" style="padding:1%">
+                                        <div class="row">
+                                            <h5><br /></h5>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <label style="font-size:12px">Fecha Préstamo : @item.borrowDetail.BorrowDate.ToShortDateString()</label>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <label style="font-size:12px">Fecha Devolución: @item.borrowDetail.BorrowReturnDate.ToShortDateString()</label>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- fin fila -->
+                        <br>
+                    }
+                </div>
+                <!-- Fin informacion de prestamo -->
+
+            </div>
+        }
+    }
+    else
+    {
+        <div class="panel-body" style="text-align:center">
+            <div class="swal2-icon swal2-info">
+                <div class="swal2-icon-content">i</div>
+            </div>
+
+            <p>No existen Registros</p>
+        </div>
+    }
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+
+        // Supongamos que data tiene una propiedad 'borrows' que es un array
+        const borrows = data
+
+        // Cargar mensaje de notificacion en cada libro 
+        borrows.forEach(borrowGroup => {
+
+            if (borrowGroup.borrowDetail) {
+                const returnDate = new Date(borrowGroup.borrowDetail.BorrowReturnDate);
+                const currentDate = new Date();
+                const businessDaysLeft = calculateBusinessDays(currentDate, returnDate);
+                const overdueDays = calculateBusinessDays(returnDate, currentDate);
+
+                const alertDiv = document.getElementById(`alert-${borrowGroup.borrowDetail.Id}`);
+                if (alertDiv) {
+                    if (returnDate >= currentDate && businessDaysLeft <= 5) {
+                        alertDiv.innerHTML = `<div class="alert alert-warning">Quedan ${businessDaysLeft} días hábiles para devolver el libro.</div>`;
+                    } else if (returnDate < currentDate) {
+                        alertDiv.innerHTML = `<div class="alert alert-danger">Tiene ${overdueDays} días hábiles de retraso en la entrega.</div>`;
+                    }
+                } else {
+                    console.error(`Alert div with id alert-${borrowGroup.borrowDetail.Id} not found.`);
+                }
+            } else {
+                console.error('Expected borrowGroup to have borrowDetail property, but got:', borrowGroup);
+            }
+        });
+    });
+
+    // funcion para calcular dis habiles
+    function calculateBusinessDays(startDate, endDate) {
+        let count = 0;
+        let currentDate = new Date(startDate);
+
+        while (currentDate <= endDate) {
+            const dayOfWeek = currentDate.getDay();
+            if (dayOfWeek !== 0 && dayOfWeek !== 6) { // No contar sábados y domingos
+                count++;
+            }
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        return count;
+    }
+
+    // Funcion para expandir/contraer info de la transaccion 
+    function detailCard(header) {
+        const card = header.parentElement;
+        const content = card.querySelector('.card-content');
+        const isExpanded = content.style.display === 'block';
+
+        if (isExpanded) {
+            content.style.display = 'none';
+        } else {
+            content.style.display = 'block';
+        }
+    }
+</script>

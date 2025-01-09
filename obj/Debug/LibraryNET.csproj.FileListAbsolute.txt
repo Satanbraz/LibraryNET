@@ -1,0 +1,232 @@
+E:\ProjectsVS\LibraryNET - copia\bin\LibraryNET.dll.config
+E:\ProjectsVS\LibraryNET - copia\bin\LibraryNET.dll
+E:\ProjectsVS\LibraryNET - copia\bin\LibraryNET.pdb
+E:\ProjectsVS\LibraryNET - copia\bin\Antlr3.Runtime.dll
+E:\ProjectsVS\LibraryNET - copia\bin\BouncyCastle.Cryptography.dll
+E:\ProjectsVS\LibraryNET - copia\bin\DTO.dll
+E:\ProjectsVS\LibraryNET - copia\bin\EPPlus.dll
+E:\ProjectsVS\LibraryNET - copia\bin\EPPlus.Interfaces.dll
+E:\ProjectsVS\LibraryNET - copia\bin\EPPlus.System.Drawing.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itext.barcodes.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itext.bouncy-castle-connector.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itext.commons.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itext.forms.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itext.io.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itext.kernel.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itext.layout.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itext.pdfa.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itext.pdfua.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itext.sign.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itext.styledxmlparser.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itext.svg.dll
+E:\ProjectsVS\LibraryNET - copia\bin\itextsharp.dll
+E:\ProjectsVS\LibraryNET - copia\bin\LibraryNET.Implementation.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Bcl.AsyncInterfaces.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Extensions.DependencyInjection.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Extensions.Logging.Abstractions.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Extensions.Logging.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Extensions.Options.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Extensions.Primitives.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.IO.RecyclableMemoryStream.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Web.Infrastructure.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Newtonsoft.Json.Bson.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Newtonsoft.Json.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Buffers.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.ComponentModel.Annotations.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Data.SqlClient.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Diagnostics.DiagnosticSource.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Memory.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Net.Http.Formatting.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Numerics.Vectors.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Runtime.CompilerServices.Unsafe.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Threading.Tasks.Extensions.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.ValueTuple.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.Helpers.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.Http.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.Mvc.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.Optimization.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.Razor.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.WebPages.Deployment.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.WebPages.dll
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.WebPages.Razor.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Unity.Abstractions.dll
+E:\ProjectsVS\LibraryNET - copia\bin\Unity.Container.dll
+E:\ProjectsVS\LibraryNET - copia\bin\WebGrease.dll
+E:\ProjectsVS\LibraryNET - copia\bin\zxing.dll
+E:\ProjectsVS\LibraryNET - copia\bin\zxing.presentation.dll
+E:\ProjectsVS\LibraryNET - copia\bin\DTO.pdb
+E:\ProjectsVS\LibraryNET - copia\bin\DTO.dll.config
+E:\ProjectsVS\LibraryNET - copia\bin\LibraryNET.Implementation.pdb
+E:\ProjectsVS\LibraryNET - copia\bin\LibraryNET.Implementation.dll.config
+E:\ProjectsVS\LibraryNET - copia\bin\BouncyCastle.Cryptography.xml
+E:\ProjectsVS\LibraryNET - copia\bin\EPPlus.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itext.barcodes.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itext.bouncy-castle-connector.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itext.commons.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itext.forms.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itext.io.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itext.kernel.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itext.layout.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itext.pdfa.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itext.pdfua.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itext.sign.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itext.styledxmlparser.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itext.svg.xml
+E:\ProjectsVS\LibraryNET - copia\bin\itextsharp.xml
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Bcl.AsyncInterfaces.xml
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Extensions.DependencyInjection.xml
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Extensions.Logging.xml
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Extensions.Logging.Abstractions.xml
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Extensions.Options.xml
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.Extensions.Primitives.xml
+E:\ProjectsVS\LibraryNET - copia\bin\Microsoft.IO.RecyclableMemoryStream.xml
+E:\ProjectsVS\LibraryNET - copia\bin\Newtonsoft.Json.Bson.pdb
+E:\ProjectsVS\LibraryNET - copia\bin\Newtonsoft.Json.Bson.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Buffers.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Data.SqlClient.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Diagnostics.DiagnosticSource.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Memory.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Net.Http.Formatting.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Numerics.Vectors.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Runtime.CompilerServices.Unsafe.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Threading.Tasks.Extensions.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.ValueTuple.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.Helpers.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.Http.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.Mvc.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.WebPages.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.WebPages.Deployment.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.WebPages.Razor.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.Optimization.xml
+E:\ProjectsVS\LibraryNET - copia\bin\System.Web.Razor.xml
+E:\ProjectsVS\LibraryNET - copia\bin\Newtonsoft.Json.xml
+E:\ProjectsVS\LibraryNET - copia\bin\Unity.Abstractions.pdb
+E:\ProjectsVS\LibraryNET - copia\bin\Unity.Container.pdb
+E:\ProjectsVS\LibraryNET - copia\bin\Antlr3.Runtime.pdb
+E:\ProjectsVS\LibraryNET - copia\bin\zxing.xml
+E:\ProjectsVS\LibraryNET - copia\bin\zxing.presentation.xml
+E:\ProjectsVS\LibraryNET - copia\bin\es\System.Web.Optimization.resources.dll
+E:\ProjectsVS\LibraryNET - copia\bin\es\System.Web.Razor.resources.dll
+E:\ProjectsVS\LibraryNET - copia\obj\Debug\LibraryNET.csproj.AssemblyReference.cache
+E:\ProjectsVS\LibraryNET - copia\obj\Debug\LibraryNET.csproj.CoreCompileInputs.cache
+E:\ProjectsVS\LibraryNET - copia\obj\Debug\LibraryNET.csproj.Up2Date
+E:\ProjectsVS\LibraryNET - copia\obj\Debug\LibraryNET.dll
+E:\ProjectsVS\LibraryNET - copia\obj\Debug\LibraryNET.pdb
+E:\ProjectsVS\LibraryNET\bin\LibraryNET.dll.config
+E:\ProjectsVS\LibraryNET\bin\LibraryNET.dll
+E:\ProjectsVS\LibraryNET\bin\LibraryNET.pdb
+E:\ProjectsVS\LibraryNET\bin\Antlr3.Runtime.dll
+E:\ProjectsVS\LibraryNET\bin\BouncyCastle.Cryptography.dll
+E:\ProjectsVS\LibraryNET\bin\DTO.dll
+E:\ProjectsVS\LibraryNET\bin\EPPlus.dll
+E:\ProjectsVS\LibraryNET\bin\EPPlus.Interfaces.dll
+E:\ProjectsVS\LibraryNET\bin\EPPlus.System.Drawing.dll
+E:\ProjectsVS\LibraryNET\bin\itext.barcodes.dll
+E:\ProjectsVS\LibraryNET\bin\itext.bouncy-castle-connector.dll
+E:\ProjectsVS\LibraryNET\bin\itext.commons.dll
+E:\ProjectsVS\LibraryNET\bin\itext.forms.dll
+E:\ProjectsVS\LibraryNET\bin\itext.io.dll
+E:\ProjectsVS\LibraryNET\bin\itext.kernel.dll
+E:\ProjectsVS\LibraryNET\bin\itext.layout.dll
+E:\ProjectsVS\LibraryNET\bin\itext.pdfa.dll
+E:\ProjectsVS\LibraryNET\bin\itext.pdfua.dll
+E:\ProjectsVS\LibraryNET\bin\itext.sign.dll
+E:\ProjectsVS\LibraryNET\bin\itext.styledxmlparser.dll
+E:\ProjectsVS\LibraryNET\bin\itext.svg.dll
+E:\ProjectsVS\LibraryNET\bin\itextsharp.dll
+E:\ProjectsVS\LibraryNET\bin\LibraryNET.Implementation.dll
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Bcl.AsyncInterfaces.dll
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Extensions.DependencyInjection.dll
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Extensions.Logging.Abstractions.dll
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Extensions.Logging.dll
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Extensions.Options.dll
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Extensions.Primitives.dll
+E:\ProjectsVS\LibraryNET\bin\Microsoft.IO.RecyclableMemoryStream.dll
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Web.Infrastructure.dll
+E:\ProjectsVS\LibraryNET\bin\Newtonsoft.Json.Bson.dll
+E:\ProjectsVS\LibraryNET\bin\Newtonsoft.Json.dll
+E:\ProjectsVS\LibraryNET\bin\System.Buffers.dll
+E:\ProjectsVS\LibraryNET\bin\System.ComponentModel.Annotations.dll
+E:\ProjectsVS\LibraryNET\bin\System.Data.SqlClient.dll
+E:\ProjectsVS\LibraryNET\bin\System.Diagnostics.DiagnosticSource.dll
+E:\ProjectsVS\LibraryNET\bin\System.Memory.dll
+E:\ProjectsVS\LibraryNET\bin\System.Net.Http.Formatting.dll
+E:\ProjectsVS\LibraryNET\bin\System.Numerics.Vectors.dll
+E:\ProjectsVS\LibraryNET\bin\System.Runtime.CompilerServices.Unsafe.dll
+E:\ProjectsVS\LibraryNET\bin\System.Threading.Tasks.Extensions.dll
+E:\ProjectsVS\LibraryNET\bin\System.ValueTuple.dll
+E:\ProjectsVS\LibraryNET\bin\System.Web.Helpers.dll
+E:\ProjectsVS\LibraryNET\bin\System.Web.Http.dll
+E:\ProjectsVS\LibraryNET\bin\System.Web.Mvc.dll
+E:\ProjectsVS\LibraryNET\bin\System.Web.Optimization.dll
+E:\ProjectsVS\LibraryNET\bin\System.Web.Razor.dll
+E:\ProjectsVS\LibraryNET\bin\System.Web.WebPages.Deployment.dll
+E:\ProjectsVS\LibraryNET\bin\System.Web.WebPages.dll
+E:\ProjectsVS\LibraryNET\bin\System.Web.WebPages.Razor.dll
+E:\ProjectsVS\LibraryNET\bin\Unity.Abstractions.dll
+E:\ProjectsVS\LibraryNET\bin\Unity.Container.dll
+E:\ProjectsVS\LibraryNET\bin\WebGrease.dll
+E:\ProjectsVS\LibraryNET\bin\zxing.dll
+E:\ProjectsVS\LibraryNET\bin\zxing.presentation.dll
+E:\ProjectsVS\LibraryNET\bin\DTO.pdb
+E:\ProjectsVS\LibraryNET\bin\DTO.dll.config
+E:\ProjectsVS\LibraryNET\bin\LibraryNET.Implementation.pdb
+E:\ProjectsVS\LibraryNET\bin\LibraryNET.Implementation.dll.config
+E:\ProjectsVS\LibraryNET\bin\BouncyCastle.Cryptography.xml
+E:\ProjectsVS\LibraryNET\bin\EPPlus.xml
+E:\ProjectsVS\LibraryNET\bin\itext.barcodes.xml
+E:\ProjectsVS\LibraryNET\bin\itext.bouncy-castle-connector.xml
+E:\ProjectsVS\LibraryNET\bin\itext.commons.xml
+E:\ProjectsVS\LibraryNET\bin\itext.forms.xml
+E:\ProjectsVS\LibraryNET\bin\itext.io.xml
+E:\ProjectsVS\LibraryNET\bin\itext.kernel.xml
+E:\ProjectsVS\LibraryNET\bin\itext.layout.xml
+E:\ProjectsVS\LibraryNET\bin\itext.pdfa.xml
+E:\ProjectsVS\LibraryNET\bin\itext.pdfua.xml
+E:\ProjectsVS\LibraryNET\bin\itext.sign.xml
+E:\ProjectsVS\LibraryNET\bin\itext.styledxmlparser.xml
+E:\ProjectsVS\LibraryNET\bin\itext.svg.xml
+E:\ProjectsVS\LibraryNET\bin\itextsharp.xml
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Bcl.AsyncInterfaces.xml
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Extensions.DependencyInjection.xml
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Extensions.Logging.xml
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Extensions.Logging.Abstractions.xml
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Extensions.Options.xml
+E:\ProjectsVS\LibraryNET\bin\Microsoft.Extensions.Primitives.xml
+E:\ProjectsVS\LibraryNET\bin\Microsoft.IO.RecyclableMemoryStream.xml
+E:\ProjectsVS\LibraryNET\bin\Newtonsoft.Json.Bson.pdb
+E:\ProjectsVS\LibraryNET\bin\Newtonsoft.Json.Bson.xml
+E:\ProjectsVS\LibraryNET\bin\System.Buffers.xml
+E:\ProjectsVS\LibraryNET\bin\System.Data.SqlClient.xml
+E:\ProjectsVS\LibraryNET\bin\System.Diagnostics.DiagnosticSource.xml
+E:\ProjectsVS\LibraryNET\bin\System.Memory.xml
+E:\ProjectsVS\LibraryNET\bin\System.Net.Http.Formatting.xml
+E:\ProjectsVS\LibraryNET\bin\System.Numerics.Vectors.xml
+E:\ProjectsVS\LibraryNET\bin\System.Runtime.CompilerServices.Unsafe.xml
+E:\ProjectsVS\LibraryNET\bin\System.Threading.Tasks.Extensions.xml
+E:\ProjectsVS\LibraryNET\bin\System.ValueTuple.xml
+E:\ProjectsVS\LibraryNET\bin\System.Web.Helpers.xml
+E:\ProjectsVS\LibraryNET\bin\System.Web.Http.xml
+E:\ProjectsVS\LibraryNET\bin\System.Web.Mvc.xml
+E:\ProjectsVS\LibraryNET\bin\System.Web.WebPages.xml
+E:\ProjectsVS\LibraryNET\bin\System.Web.WebPages.Deployment.xml
+E:\ProjectsVS\LibraryNET\bin\System.Web.WebPages.Razor.xml
+E:\ProjectsVS\LibraryNET\bin\System.Web.Optimization.xml
+E:\ProjectsVS\LibraryNET\bin\System.Web.Razor.xml
+E:\ProjectsVS\LibraryNET\bin\Newtonsoft.Json.xml
+E:\ProjectsVS\LibraryNET\bin\Unity.Abstractions.pdb
+E:\ProjectsVS\LibraryNET\bin\Unity.Container.pdb
+E:\ProjectsVS\LibraryNET\bin\Antlr3.Runtime.pdb
+E:\ProjectsVS\LibraryNET\bin\zxing.xml
+E:\ProjectsVS\LibraryNET\bin\zxing.presentation.xml
+E:\ProjectsVS\LibraryNET\bin\es\System.Web.Optimization.resources.dll
+E:\ProjectsVS\LibraryNET\bin\es\System.Web.Razor.resources.dll
+E:\ProjectsVS\LibraryNET\obj\Debug\LibraryNET.csproj.AssemblyReference.cache
+E:\ProjectsVS\LibraryNET\obj\Debug\LibraryNET.csproj.CoreCompileInputs.cache
+E:\ProjectsVS\LibraryNET\obj\Debug\LibraryNET.csproj.Up2Date
+E:\ProjectsVS\LibraryNET\obj\Debug\LibraryNET.dll
+E:\ProjectsVS\LibraryNET\obj\Debug\LibraryNET.pdb
